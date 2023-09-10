@@ -1,11 +1,13 @@
 import React from 'react';
 
+import UserPanel from './components/UserPanel';
+
 const HabitsApp = () => {
   return (
     <>
-      <header>
-      </header>
+      <header></header>
       <main>
+        <UserPanel />
       </main>
     </>
   );
