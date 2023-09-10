@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { redirect, useNavigate } from 'react-router-dom';
 
 import Button from './Button';
 import {
@@ -20,27 +21,35 @@ const StyledWrapper = styled.div`
 `;
 
 const UserPanel = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state: TRootState) => state.auth);
 
   const handleLogin = () => {
-    dispatch(login());
+    dispatch(login()).then(() => redirect('/'));
   };
 
   const handleLogut = () => {
-    dispatch(logout());
+    dispatch(logout()).then(() => navigate('/guest'));
+  };
+
+  const handleNav = (endpoint: string) => {
+    navigate(endpoint);
   };
 
   return (
     <StyledWrapper>
       {user.displayName ? <p>Welcome {user.displayName}!</p> : null}
-      {!user.uid ? (
+      {user.authenticated ? (
+        <Button text={'Home'} action={() => handleNav('/')} />
+      ) : null}
+      {!user.authenticated ? (
         <Button text={'Login'} action={handleLogin} />
       ) : (
         <Button text={'Logout'} action={handleLogut} />
       )}
-      {user.uid ? (
-        <Button text={'Settings'} action={() => null} />
+      {user.authenticated ? (
+        <Button text={'Settings'} action={() => handleNav('/settings')} />
       ) : null}
     </StyledWrapper>
   );
