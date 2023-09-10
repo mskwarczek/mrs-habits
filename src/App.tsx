@@ -1,15 +1,18 @@
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
 
-import UserPanel from './components/UserPanel';
+import Header from './components/Header';
+import GlobalStyle from './styles/GlobalStyle';
+import defaultTheme from './styles/themes/defaultTheme';
 
 const HabitsApp = () => {
   return (
-    <>
-      <header></header>
+    <ThemeProvider theme={defaultTheme} >
+      <GlobalStyle />
+      <Header />
       <main>
-        <UserPanel />
       </main>
-    </>
+    </ThemeProvider>
   );
 };
 

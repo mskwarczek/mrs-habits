@@ -1,5 +1,7 @@
 import React from 'react';
+import styled from 'styled-components';
 
+import Button from './Button';
 import {
   TRootState,
   useAppDispatch,
@@ -7,6 +9,15 @@ import {
   login,
   logout,
 } from '../store';
+
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: ${({ theme }) => theme.space.m};
+  background-color: ${({ theme }) => theme.color.bg.primary};
+`;
 
 const UserPanel = () => {
   const dispatch = useAppDispatch();
@@ -21,14 +32,17 @@ const UserPanel = () => {
   };
 
   return (
-    <div>
-      {user.displayName ? <p>Welcome {user.displayName}</p> : null}
+    <StyledWrapper>
+      {user.displayName ? <p>Welcome {user.displayName}!</p> : null}
       {!user.uid ? (
-        <button onClick={handleLogin}>Login</button>
+        <Button text={'Login'} action={handleLogin} />
       ) : (
-        <button onClick={handleLogut}>Logout</button>
+        <Button text={'Logout'} action={handleLogut} />
       )}
-    </div>
+      {user.uid ? (
+        <Button text={'Settings'} action={() => null} />
+      ) : null}
+    </StyledWrapper>
   );
 };
 
