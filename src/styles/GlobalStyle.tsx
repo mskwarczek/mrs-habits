@@ -10,10 +10,10 @@ const GlobalStyle = createGlobalStyle`
   body {
     padding: ${({ theme }) => theme.space.xs};
     background-color: ${({ theme }) => theme.color.bg.primary};
-    color: ${({ theme })  => theme.color.text.primary};
-    font-family: ${({ theme })  => theme.fontFamily};
-    font-size: ${({ theme })  => theme.fontSize.m};
-    font-weight: ${({ theme })  => theme.fontWeight.normal};
+    color: ${({ theme }) => theme.color.text.primary};
+    font-family: ${({ theme }) => theme.fontFamily};
+    font-size: ${({ theme }) => theme.fontSize.m};
+    font-weight: ${({ theme }) => theme.fontWeight.normal};
   }
 
   a {
@@ -29,5 +29,5 @@ const GlobalStyle = createGlobalStyle`
     border: none;
   }
 `;
- 
+
 export default GlobalStyle;

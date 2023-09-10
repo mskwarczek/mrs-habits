@@ -8,11 +8,7 @@ const GuestPage = () => {
 
   if (user.authenticated) return <Navigate to={'/'} />;
 
-  return (
-    <main>
-      Guest Page
-    </main>
-  );
+  return <main>Guest Page</main>;
 };
 
 export default GuestPage;

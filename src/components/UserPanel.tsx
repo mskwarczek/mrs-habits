@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { redirect, useNavigate } from 'react-router-dom';
 
-import Button from './Button';
+import { Button } from './index';
 import {
   TRootState,
   useAppDispatch,
@@ -41,15 +41,27 @@ const UserPanel = () => {
     <StyledWrapper>
       {user.displayName ? <p>Welcome {user.displayName}!</p> : null}
       {user.authenticated ? (
-        <Button text={'Home'} action={() => handleNav('/')} />
+        <Button
+          text={'Home'}
+          action={() => handleNav('/')}
+        />
       ) : null}
       {!user.authenticated ? (
-        <Button text={'Login'} action={handleLogin} />
+        <Button
+          text={'Login'}
+          action={handleLogin}
+        />
       ) : (
-        <Button text={'Logout'} action={handleLogut} />
+        <Button
+          text={'Logout'}
+          action={handleLogut}
+        />
       )}
       {user.authenticated ? (
-        <Button text={'Settings'} action={() => handleNav('/settings')} />
+        <Button
+          text={'Settings'}
+          action={() => handleNav('/settings')}
+        />
       ) : null}
     </StyledWrapper>
   );

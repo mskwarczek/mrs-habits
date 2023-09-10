@@ -10,7 +10,7 @@ import {
   GoogleAuthProvider,
 } from 'firebase/auth';
 
-import { initUser, clearUser } from '../index';
+import { initUser, clearUser, clearGoals } from '../index';
 
 export interface IAuthState {
   displayName?: string;
@@ -58,6 +58,7 @@ export const logout = createAsyncThunk('logout', async (_, thunkAPI) => {
     const auth = getAuth();
     await signOut(auth);
     thunkAPI.dispatch(clearUser());
+    thunkAPI.dispatch(clearGoals());
   } catch (error) {
     if (error instanceof Error)
       return thunkAPI.rejectWithValue({ error: error.message });

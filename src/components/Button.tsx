@@ -19,17 +19,27 @@ const StyledButton = styled.button`
     background-color: ${({ theme }) => theme.color.text.action};
     color: ${({ theme }) => theme.color.bg.action};
   }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: ${({ theme }) => theme.color.bg.secondary};
+    color: ${({ theme }) => theme.color.text.primary};
+  }
 `;
 
 interface IButtonProps {
   text: string;
   disabled?: boolean;
+  title?: string;
   action?: (...args: any[]) => void;
-};
+}
 
-const Button = ({ text, disabled, action }: IButtonProps) => {
+const Button = ({ text, disabled, title, action }: IButtonProps) => {
   return (
-    <StyledButton onClick={action && !disabled ? () => action() : () => null} disabled={disabled}>
+    <StyledButton
+      onClick={action && !disabled ? () => action() : () => null}
+      disabled={disabled}
+      title={title}
+    >
       {text}
     </StyledButton>
   );

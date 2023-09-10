@@ -33,7 +33,7 @@ const defaultTheme: DefaultTheme = {
       error: '#F2AEAE',
       warning: '#FAF0A5',
       success: '#BBFFB5',
-    }
+    },
   },
   fontFamily: 'Roboto, sans-serif',
   fontSize: {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { HashRouter  } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 import HabitsApp from './App';
 import reportWebVitals from './reportWebVitals';
@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <HashRouter >
+      <HashRouter>
         <HabitsApp />
       </HashRouter>
     </Provider>

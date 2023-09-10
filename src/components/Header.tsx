@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import UserPanel from './UserPanel';
+import { UserPanel } from './index';
 
 const StyledHeader = styled.header`
   display: flex;

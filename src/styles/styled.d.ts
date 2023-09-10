@@ -6,7 +6,7 @@ interface ISizeValues {
   m: string;
   l: string;
   xl: string;
-};
+}
 
 interface IColorValues {
   primary: string;
@@ -20,20 +20,20 @@ interface IColorValues {
 
 declare module 'styled-components' {
   export interface DefaultTheme {
-    breakpoints: ISizeValues,
-    space: ISizeValues,
+    breakpoints: ISizeValues;
+    space: ISizeValues;
     color: {
-      text: IColorValues,
-      bg: IColorValues,
-    },
+      text: IColorValues;
+      bg: IColorValues;
+    };
     fontFamily: string;
-    fontSize: ISizeValues,
+    fontSize: ISizeValues;
     fontWeight: {
-      normal: string|number;
-      bold: string|number;
-      action: string|number;
-    },
-    lineHeight: ISizeValues,
-    borderRad: ISizeValues,
-  };
-};
+      normal: string | number;
+      bold: string | number;
+      action: string | number;
+    };
+    lineHeight: ISizeValues;
+    borderRad: ISizeValues;
+  }
+}

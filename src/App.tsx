@@ -1,14 +1,14 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import Header from './components/Header';
+import { Header } from './components';
 import Router from './routes/Router';
 import GlobalStyle from './styles/GlobalStyle';
 import defaultTheme from './styles/themes/defaultTheme';
 
 const HabitsApp = () => {
   return (
-    <ThemeProvider theme={defaultTheme} >
+    <ThemeProvider theme={defaultTheme}>
       <GlobalStyle />
       <Header />
       <Router />
