@@ -35,7 +35,8 @@ export const getUserGoals = createAsyncThunk(
       const goalsToAdd: IGoal[] = [];
       const response = await getDocs(collection(db, 'goals'));
       response.forEach((doc) => {
-        if (goals.includes(doc.id)) goalsToAdd.push(<IGoal>{ ...doc.data(), id: doc.id });
+        if (goals.includes(doc.id))
+          goalsToAdd.push(<IGoal>{ ...doc.data(), id: doc.id });
       });
       return goalsToAdd as IGoal[];
     } catch (error) {
