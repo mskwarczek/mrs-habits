@@ -47,7 +47,7 @@ const NewGoalPage = () => {
   const handleSaveGoal = () => {
     const newGoalObj: IGoal = {
       name,
-      createdAt: new Date(),
+      createdAt: new Date().toString(),
       createdBy: user.uid,
       owner: user.uid,
       startDate,

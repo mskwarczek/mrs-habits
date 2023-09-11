@@ -6,7 +6,7 @@ export type { TRootState, TAppDispatch } from './store';
 export { app, db } from '../services/firebase';
 export { useAppDispatch, useAppSelector } from './hooks';
 export { authSlice, login, logout } from './slices/authSlice';
-export { goalsSlice, createGoal, clearGoals } from './slices/goalsSlice';
+export { goalsSlice, getUserGoals, createGoal, clearGoals } from './slices/goalsSlice';
 export {
   userSlice,
   initUser,

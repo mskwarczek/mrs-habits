@@ -5,7 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import { getDoc, setDoc, updateDoc, collection, doc } from 'firebase/firestore';
 
-import { db } from '../index';
+import { db, getUserGoals } from '../index';
 
 export interface IUser {
   uid?: string;
@@ -36,6 +36,7 @@ export const initUser = createAsyncThunk(
       if (docSnap.exists()) {
         const userData = docSnap.data();
         const goals = userData?.goals;
+        thunkAPI.dispatch(getUserGoals(goals));
         return { uid, goals } as IUser;
       } else {
         const usersRef = collection(db, 'users');
