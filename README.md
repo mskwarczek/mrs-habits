@@ -1,3 +1,18 @@
+# Project setup
+
+## Firebase setup
+
+Before running this app you need to connect it with your [Firebase app](https://firebase.google.com).
+To do so, update file '.env-template' with your Firebase app config and then change it's name to '.env'.
+
+
+
+
+
+
+
+# Create React App
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
