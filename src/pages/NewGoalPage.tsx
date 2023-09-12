@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, Input } from '../components';
+import { Button, FormField } from '../components';
 import {
   TRootState,
   useAppDispatch,
@@ -68,7 +68,7 @@ const NewGoalPage = () => {
     <main>
       Create a new goal
       <StyledWrapper>
-        <Input
+        <FormField
           id={'new-goal-name'}
           type={'text'}
           value={name}
@@ -76,21 +76,21 @@ const NewGoalPage = () => {
           label={'Goal name: '}
           onChange={(e) => handleNameChange(e)}
         />
-        <Input
+        <FormField
           id={'new-goal-start-date'}
           type={'date'}
           value={startDate}
           label={'When are you starting: '}
           onChange={(e) => handleStartDateChange(e)}
         />
-        <Input
+        <FormField
           id={'new-goal-end-date'}
           type={'date'}
           value={endDate}
           label={'When do you plan to fulfill your goal?: '}
           onChange={(e) => handleEndDateChange(e)}
         />
-        <Input
+        <FormField
           id={'new-goal-description'}
           type={'textarea'}
           value={description}
