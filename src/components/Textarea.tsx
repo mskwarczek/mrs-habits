@@ -34,7 +34,6 @@ const Textarea = ({
   required,
   onChange,
 }: IInputProps) => {
-
   return (
     <StyledTextarea
       id={id}

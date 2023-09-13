@@ -21,7 +21,7 @@ interface IInputProps {
   id: string;
   name?: string;
   type?: string;
-  value?: string|number;
+  value?: string | number;
   disabled?: boolean;
   required?: boolean;
   onChange?: (...args: any[]) => void;
@@ -36,7 +36,6 @@ const Input = ({
   required,
   onChange,
 }: IInputProps) => {
-
   return (
     <StyledInput
       id={id}

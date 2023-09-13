@@ -59,8 +59,8 @@ const FormField = ({
       <StyledWrapper>
         <label htmlFor={id}>{label}</label>
         <StyledWrapper>
-          {type === 'select'
-            ? <Select
+          {type === 'select' ? (
+            <Select
               id={id}
               name={name}
               value={value}
@@ -70,8 +70,8 @@ const FormField = ({
               multiple={multiple}
               onChange={onChange}
             />
-            : type === 'textarea'
-            ? <Textarea
+          ) : type === 'textarea' ? (
+            <Textarea
               id={id}
               name={name}
               value={value}
@@ -79,7 +79,8 @@ const FormField = ({
               required={required}
               onChange={onChange}
             />
-            : <Input
+          ) : (
+            <Input
               id={id}
               name={name}
               type={type}
@@ -88,7 +89,7 @@ const FormField = ({
               required={required}
               onChange={onChange}
             />
-            }
+          )}
           <StyledValidity isvalid={isValid ? 'true' : undefined}>
             {isValid ? 'OK' : '*'}
           </StyledValidity>

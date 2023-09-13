@@ -34,7 +34,7 @@ interface ISelectProps {
 const Select = ({
   id,
   name,
-  value = '',
+  value,
   options = [],
   disabled,
   required,
@@ -51,7 +51,14 @@ const Select = ({
       multiple={multiple}
       onChange={onChange}
     >
-      {options.map(option => <option key={option.value} value={option.value}>{option.text}</option>)}
+      {options.map((option) => (
+        <option
+          key={option.value}
+          value={option.value}
+        >
+          {option.text}
+        </option>
+      ))}
     </StyledSelect>
   );
 };

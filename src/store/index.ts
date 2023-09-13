@@ -1,5 +1,11 @@
 export type { IAuthState, IAuthPayload } from './slices/authSlice';
 export type { IGoal, IGoalsState } from './slices/goalsSlice';
+export type {
+  IHabit,
+  IHabitsState,
+  TStandardHabitFreq,
+  THabitFreq,
+} from './slices/habitsSlice';
 export type { IUser, IUserState, IUserGoalPayload } from './slices/userSlice';
 export type { TRootState, TAppDispatch } from './store';
 
@@ -12,6 +18,12 @@ export {
   createGoal,
   clearGoals,
 } from './slices/goalsSlice';
+export {
+  habitsSlice,
+  getUserHabits,
+  createHabit,
+  clearHabits,
+} from './slices/habitsSlice';
 export {
   userSlice,
   initUser,
