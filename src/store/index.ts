@@ -28,6 +28,7 @@ export {
   userSlice,
   initUser,
   addUserGoal,
+  addUserHabit,
   clearUser,
 } from './slices/userSlice';
 export { store } from './store';

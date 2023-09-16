@@ -60,16 +60,17 @@ const initialState: IHabitsState = {
 
 export const getUserHabits = createAsyncThunk(
   'getUserHabits',
-  async (goals: string[], thunkAPI) => {
+  async (habits: string[], thunkAPI) => {
     try {
-      const goalsToAdd: IHabit[] = [];
+      const habitsToAdd: IHabit[] = [];
       const response = await getDocs(collection(db, 'habits'));
       response.forEach((doc) => {
-        if (goals.includes(doc.id))
-          goalsToAdd.push(<IHabit>{ ...doc.data(), id: doc.id });
+        if (habits.includes(doc.id))
+          habitsToAdd.push(<IHabit>{ ...doc.data(), id: doc.id });
       });
-      return goalsToAdd as IHabit[];
+      return habitsToAdd as IHabit[];
     } catch (error) {
+      console.error('ERROR!', error);
       if (error instanceof Error)
         return thunkAPI.rejectWithValue({ error: error.message });
       else return thunkAPI.rejectWithValue({ error });
@@ -85,6 +86,7 @@ export const createHabit = createAsyncThunk(
       const docRef = await addDoc(habitsRef, habit);
       return { ...habit, id: docRef.id } as IHabit;
     } catch (error) {
+      console.error('ERROR!', error);
       if (error instanceof Error)
         return thunkAPI.rejectWithValue({ error: error.message });
       else return thunkAPI.rejectWithValue({ error });

@@ -8,6 +8,7 @@ import {
   useAppSelector,
   IHabit,
   TStandardHabitFreq,
+  IGoal,
 } from '../store';
 
 enum CreatorActions {
@@ -146,11 +147,15 @@ const StyledBttonsGroup = styled.div`
 
 interface ICreatorProps {
   stepsData: ({ state, changeValue }: ICreatorSteps) => React.ReactElement[];
-  documentCreationFn: any;
-  // helperFn?: () => void;
+  documentCreationFn: any; // TODO
+  helperFn?: any; // TODO
 }
 
-export const Creator = ({ stepsData, documentCreationFn }: ICreatorProps) => {
+export const Creator = ({
+  stepsData,
+  documentCreationFn,
+  helperFn,
+}: ICreatorProps) => {
   const appDispatch = useAppDispatch();
   const user = useAppSelector((state: TRootState) => state.auth);
   const [state, dispatch] = useReducer(creatorReducer, initialCreatorState);
@@ -201,11 +206,11 @@ export const Creator = ({ stepsData, documentCreationFn }: ICreatorProps) => {
     if (!state.result) return;
     appDispatch(documentCreationFn(state.result))
       .unwrap()
-      // .then((result) => {
-      // if (user.uid && result.id) {
-      // appDispatch(addUserHabit({ userId: user.uid, habitId: result.id }));
-      // }
-      // })
+      .then((result: IHabit) => {
+        if (user.uid && result.id) {
+          appDispatch(helperFn({ userId: user.uid, habitId: result.id }));
+        }
+      })
       .then(() =>
         dispatch({
           type: CreatorActions.CLOSE,

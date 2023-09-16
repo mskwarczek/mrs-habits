@@ -5,11 +5,12 @@ import {
 } from '@reduxjs/toolkit';
 import { getDoc, setDoc, updateDoc, collection, doc } from 'firebase/firestore';
 
-import { db, getUserGoals } from '../index';
+import { db, getUserGoals, getUserHabits } from '../index';
 
 export interface IUser {
   uid?: string;
   goals?: string[];
+  habits?: string[];
 }
 
 export interface IUserState extends IUser {
@@ -21,9 +22,15 @@ export interface IUserGoalPayload {
   goalId: string;
 }
 
+export interface IUserHabitPayload {
+  userId: string;
+  habitId: string;
+}
+
 const initialState: IUserState = {
   uid: undefined,
   goals: undefined,
+  habits: undefined,
   error: undefined,
 };
 
@@ -36,16 +43,20 @@ export const initUser = createAsyncThunk(
       if (docSnap.exists()) {
         const userData = docSnap.data();
         const goals = userData?.goals;
-        thunkAPI.dispatch(getUserGoals(goals));
-        return { uid, goals } as IUser;
+        const habits = userData?.habits;
+        if (goals && goals.length) thunkAPI.dispatch(getUserGoals(goals));
+        if (habits && habits.length) thunkAPI.dispatch(getUserHabits(habits));
+        return { uid, goals, habits } as IUser;
       } else {
         const usersRef = collection(db, 'users');
         await setDoc(doc(usersRef, uid), {
           goals: [],
+          habits: [],
         });
-        return { uid, goals: [] } as IUser;
+        return { uid, goals: [], habits: [] } as IUser;
       }
     } catch (error) {
+      console.error('ERROR!', error);
       if (error instanceof Error)
         return thunkAPI.rejectWithValue({ error: error.message });
       else return thunkAPI.rejectWithValue({ error });
@@ -61,7 +72,7 @@ export const addUserGoal = createAsyncThunk(
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const userData = docSnap.data();
-        const goals = userData?.goals;
+        const goals = userData.goals ? userData.goals : [];
         if (!goals.includes(goalId)) {
           await updateDoc(docRef, {
             goals: [...goals, goalId],
@@ -81,6 +92,43 @@ export const addUserGoal = createAsyncThunk(
         );
       }
     } catch (error) {
+      console.error('ERROR!', error);
+      if (error instanceof Error)
+        return thunkAPI.rejectWithValue({ error: error.message });
+      else return thunkAPI.rejectWithValue({ error });
+    }
+  },
+);
+
+export const addUserHabit = createAsyncThunk(
+  'addUserHabit',
+  async ({ userId, habitId }: IUserHabitPayload, thunkAPI) => {
+    try {
+      const docRef = doc(db, 'users', userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+        const habits = userData.habits ? userData.habits : [];
+        if (!habits.includes(habitId)) {
+          await updateDoc(docRef, {
+            habits: [...habits, habitId],
+          });
+          return {
+            uid: userId,
+            habits: [...habits, habitId],
+          } as IUser;
+        } else {
+          throw new Error(
+            `Error in action addUserHabit. Habit with given ID (${habitId}) already exists on this user (${userId}).`,
+          );
+        }
+      } else {
+        throw new Error(
+          `Error in action addUserHabit. User with given ID doesn't exist (${userId}).`,
+        );
+      }
+    } catch (error) {
+      console.error('ERROR!', error);
       if (error instanceof Error)
         return thunkAPI.rejectWithValue({ error: error.message });
       else return thunkAPI.rejectWithValue({ error });
@@ -95,6 +143,7 @@ export const userSlice = createSlice({
     clearUser(state) {
       state.uid = initialState.uid;
       state.goals = initialState.goals;
+      state.habits = initialState.habits;
       state.error = initialState.error;
     },
   },
@@ -102,6 +151,7 @@ export const userSlice = createSlice({
     builder.addCase(initUser.fulfilled, (state, action) => {
       state.uid = action.payload.uid;
       state.goals = action.payload.goals;
+      state.habits = action.payload.habits;
     });
     builder.addCase(initUser.rejected, (state, action) => {
       state.error = action.error;
@@ -111,6 +161,13 @@ export const userSlice = createSlice({
       state.goals = action.payload.goals;
     });
     builder.addCase(addUserGoal.rejected, (state, action) => {
+      state.error = action.error;
+    });
+    builder.addCase(addUserHabit.fulfilled, (state, action) => {
+      state.uid = action.payload.uid;
+      state.habits = action.payload.habits;
+    });
+    builder.addCase(addUserHabit.rejected, (state, action) => {
       state.error = action.error;
     });
   },

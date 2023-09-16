@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { FormField } from '../../components';
 import { Creator, ICreatorSteps } from '../Creator';
-import { createHabit } from '../../store';
+import { createHabit, addUserHabit } from '../../store';
 
 const StyledFieldsGroup = styled.div`
   display: flex;
@@ -125,7 +125,7 @@ const HabitCeator = () => {
     <Creator
       stepsData={habitCreatorSteps}
       documentCreationFn={createHabit}
-      // helperFn={addUserHabit}
+      helperFn={addUserHabit}
     />
   );
 };

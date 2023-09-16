@@ -40,6 +40,7 @@ export const getUserGoals = createAsyncThunk(
       });
       return goalsToAdd as IGoal[];
     } catch (error) {
+      console.error('ERROR!', error);
       if (error instanceof Error)
         return thunkAPI.rejectWithValue({ error: error.message });
       else return thunkAPI.rejectWithValue({ error });
@@ -55,6 +56,7 @@ export const createGoal = createAsyncThunk(
       const docRef = await addDoc(goalsRef, goal);
       return { ...goal, id: docRef.id } as IGoal;
     } catch (error) {
+      console.error('ERROR!', error);
       if (error instanceof Error)
         return thunkAPI.rejectWithValue({ error: error.message });
       else return thunkAPI.rejectWithValue({ error });
