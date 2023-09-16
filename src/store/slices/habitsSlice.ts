@@ -27,6 +27,13 @@ export type THabitFreq = { category: 'STANDARD'; type: TStandardHabitFreq };
 
 // type TReminder = 'APP' | 'NOTIFICATION' | 'EMAIL'; // TODO
 
+export type THabitRealizationValue = 'DONE' | 'WAITING' | 'NOT-DONE';
+export type THabitRealization = {
+  date: string;
+  status: THabitRealizationValue;
+  note?: string;
+};
+
 export interface IHabit {
   id?: string;
   owner?: string;
@@ -36,6 +43,8 @@ export interface IHabit {
   };
   name?: string;
   frequency?: THabitFreq;
+  defaultRealizationValue?: THabitRealizationValue;
+  realization?: THabitRealization[];
   // measurement?: {
   //   type?: TMeasurement;
   //   unit?: string;

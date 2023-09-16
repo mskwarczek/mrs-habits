@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { Button } from './index';
 import { IHabit } from '../store';
+import { getTimeSinceDate } from '../utils/datetime';
 
 const StyledCard = styled.div`
   display: flex;
@@ -23,11 +24,18 @@ const HabitCard = ({ id, name, startDate, endDate, description }: IHabit) => {
     navigate(endpoint);
   };
 
+  const timePassed = startDate && getTimeSinceDate(startDate);
+
   return (
     <StyledCard>
       <p>{name}</p>
-      <p>Start: {startDate}</p>
-      <p>End: {endDate}</p>
+      {startDate && (
+        <p>You have been following this habit since {startDate}.</p>
+      )}
+      {timePassed && timePassed.days >= 2 && (
+        <p>It is {timePassed.days} full days!</p>
+      )}
+      {endDate && <p>Planned end or update: {endDate}</p>}
       <p>{description}</p>
       <Button
         text={'Show details'}

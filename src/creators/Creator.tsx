@@ -7,9 +7,11 @@ import {
   useAppDispatch,
   useAppSelector,
   IHabit,
+  THabitRealizationValue,
   TStandardHabitFreq,
   IGoal,
 } from '../store';
+import { getTimeSinceDate, addDays } from '../utils/datetime';
 
 enum CreatorActions {
   NEXT_STEP = 'NEXT_STEP',
@@ -17,6 +19,7 @@ enum CreatorActions {
   CLOSE = 'CLOSE',
   CHANGE_VALUE = 'CHANGE_VALUE',
   ADD_META_DATA = 'ADD_META_DATA',
+  ADD_REALIZATION_DATA = 'ADD_REALIZATION_DATA',
 }
 
 export type TCreatorAction =
@@ -39,7 +42,8 @@ export type TCreatorAction =
           createdBy: string;
         };
       };
-    };
+    }
+  | { type: CreatorActions.ADD_REALIZATION_DATA; payload?: undefined };
 
 type TCreatorResult = IHabit;
 
@@ -51,7 +55,9 @@ export interface ICreatorState {
 
 export interface ICreatorSteps {
   state: ICreatorState;
-  changeValue: (e: React.FormEvent<HTMLInputElement>) => void;
+  changeValue: (
+    e: React.FormEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => void;
 }
 
 const initialCreatorState = {
@@ -84,6 +90,7 @@ export const creatorReducer = (
           case 'frequency':
             if (nested[1] === 'type') {
               if (
+                payload.value === '' ||
                 payload.value === 'HOURLY' ||
                 payload.value === 'DAILY' ||
                 payload.value === 'WEEKLY' ||
@@ -123,6 +130,27 @@ export const creatorReducer = (
           meta: action.payload.meta,
         },
       };
+    case CreatorActions.ADD_REALIZATION_DATA: {
+      if (!state.result?.startDate) return state; // TODO: error and / or step change
+      if (!state.result?.defaultRealizationValue) return state; // TODO: error and / or step change
+      const periodsData = getTimeSinceDate(state.result.startDate);
+      const periods = periodsData.days;
+      const periodsArray = [];
+      for (let i = 0; i <= periods; i++) {
+        const status: THabitRealizationValue = i < periods ? 'DONE' : 'WAITING';
+        periodsArray.push({
+          date: addDays(state.result.startDate, i).toString(),
+          status,
+        });
+      }
+      return {
+        ...state,
+        result: {
+          ...state.result,
+          realization: periodsArray,
+        },
+      };
+    }
     default:
       return state;
   }
@@ -146,7 +174,10 @@ const StyledBttonsGroup = styled.div`
 `;
 
 interface ICreatorProps {
-  stepsData: ({ state, changeValue }: ICreatorSteps) => React.ReactElement[];
+  stepsData: ({
+    state,
+    changeValue,
+  }: ICreatorSteps) => { component: React.ReactElement; isValid?: any }[]; // TODO
   documentCreationFn: any; // TODO
   helperFn?: any; // TODO
 }
@@ -160,7 +191,9 @@ export const Creator = ({
   const user = useAppSelector((state: TRootState) => state.auth);
   const [state, dispatch] = useReducer(creatorReducer, initialCreatorState);
 
-  const changeValue = (e: React.FormEvent<HTMLInputElement>) => {
+  const changeValue = (
+    e: React.FormEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     dispatch({
       type: CreatorActions.CHANGE_VALUE,
       payload: {
@@ -202,6 +235,13 @@ export const Creator = ({
     });
   };
 
+  const addRealizationData = () => {
+    if (!user.uid) return;
+    dispatch({
+      type: CreatorActions.ADD_REALIZATION_DATA,
+    });
+  };
+
   const finish = () => {
     if (!state.result) return;
     appDispatch(documentCreationFn(state.result))
@@ -222,9 +262,9 @@ export const Creator = ({
 
   return (
     <StyledWrapper>
-      {collection[state.step]}
+      {collection[state.step].component}
       <StyledBttonsGroup>
-        {state.step > 1 ? (
+        {state.step > 0 ? (
           <Button
             text={'Back'}
             action={prevStep}
@@ -239,6 +279,12 @@ export const Creator = ({
           <Button
             text={'Continue'}
             action={nextStep}
+            disabled={
+              Object.prototype.hasOwnProperty.call(
+                collection[state.step],
+                'isValid',
+              ) && collection[state.step].isValid(state.result) === false
+            }
           />
         )}
         {state.step === collection.length - 2 && (
@@ -246,8 +292,15 @@ export const Creator = ({
             text={'Go to summary'}
             action={() => {
               addMetaData();
+              addRealizationData();
               nextStep();
             }}
+            disabled={
+              Object.prototype.hasOwnProperty.call(
+                collection[state.step],
+                'isValid',
+              ) && collection[state.step].isValid(state.result) === false
+            }
           />
         )}
         {state.step === collection.length - 1 && (

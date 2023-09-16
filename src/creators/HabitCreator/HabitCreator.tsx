@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { FormField } from '../../components';
 import { Creator, ICreatorSteps } from '../Creator';
-import { createHabit, addUserHabit } from '../../store';
+import { createHabit, addUserHabit, IHabit } from '../../store';
 
 const StyledFieldsGroup = styled.div`
   display: flex;
@@ -14,74 +14,148 @@ const StyledFieldsGroup = styled.div`
 
 export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
   return [
-    <FormField
-      key={'creator-field-name'}
-      id={'creator-field-name'}
-      name={'name'}
-      type={'text'}
-      value={state.result?.name}
-      required
-      label={'Name:'}
-      description={
-        'How would you like to name your new habit? Use something simple and meaningful, like "Everyday jogging", "Weekly garden cleaning" or "Another day without a cigarette"'
-      }
-      onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
-    />,
-    <FormField
-      key={'creator-field-start-date'}
-      id={'creator-field-start-date'}
-      name={'startDate'}
-      type={'date'}
-      value={state.result?.startDate}
-      label={'Start date:'}
-      description={
-        'When are you starting? Select a date in the past if you are already following your new habit.'
-      }
-      onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
-    />,
-    <FormField
-      key={'creator-field-end-date'}
-      id={'creator-field-end-date'}
-      name={'endDate'}
-      type={'date'}
-      value={state.result?.endDate}
-      label={'End date:'}
-      description={
-        'Is there a date in the future when you would like to remove or modify this habit? If so, then provide it here. When time comes, we will notify you that your habit needs an update.'
-      }
-      onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
-    />,
-    <StyledFieldsGroup key={'creator-field-frequency'}>
-      <FormField
-        id={'creator-field-freq-type'}
-        name={'frequency.type'}
-        type={'select'}
-        options={[
-          { value: 'HOURLY', text: 'Once per hour' },
-          { value: 'DAILY', text: 'Once a day or continuously' },
-          { value: 'WEEKLY', text: 'Once a week' },
-          { value: 'MONTHLY', text: 'Once a month' },
-          { value: 'YEARLY', text: 'Every year' },
-        ]}
-        label={'Frequency:'}
-        description={'What is the frequency of your new habit?'}
-        value={state.result?.frequency?.type}
-        onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
-      />
-    </StyledFieldsGroup>,
-    <FormField
-      key={'creator-field-description'}
-      id={'creator-field-description'}
-      name={'description'}
-      type={'textarea'}
-      value={state.result?.description}
-      label={'Description:'}
-      description={'Short description or notes about your new habit'}
-      onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
-    />,
-    <div key={'creator-field-done'}>
-      <p>All done</p>
-    </div>,
+    {
+      component: (
+        <FormField
+          key={'creator-field-name'}
+          id={'creator-field-name'}
+          name={'name'}
+          type={'text'}
+          value={state.result?.name}
+          required
+          label={'Name:'}
+          description={
+            'How would you like to name your new habit? Use something simple and meaningful, like "Everyday jogging", "Weekly garden cleaning" or "Another day without a cigarette"'
+          }
+          onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
+        />
+      ),
+      isValid: (result: IHabit) =>
+        typeof result.name === 'string' && result.name.length > 0,
+    },
+    {
+      component: (
+        <StyledFieldsGroup key={'creator-field-frequency'}>
+          <FormField
+            id={'creator-field-freq-type'}
+            name={'frequency.type'}
+            type={'select'}
+            options={[
+              { value: '', text: 'Select option' },
+              // { value: 'HOURLY', text: 'Once per hour' }, // TODO
+              { value: 'DAILY', text: 'Once a day or continuously' },
+              // { value: 'WEEKLY', text: 'Once a week' }, // TODO
+              // { value: 'MONTHLY', text: 'Once a month' }, // TODO
+              // { value: 'YEARLY', text: 'Every year' }, // TODO
+            ]}
+            required
+            label={'Frequency:'}
+            description={'What is the frequency of your new habit?'}
+            value={state.result?.frequency?.type}
+            onChange={(e: React.FormEvent<HTMLSelectElement>) => changeValue(e)}
+          />
+        </StyledFieldsGroup>
+      ),
+      isValid: (result: IHabit) =>
+        typeof result.frequency?.type === 'string' &&
+        result.frequency.type.length > 0,
+    },
+    {
+      component: (
+        <FormField
+          key={'creator-field-start-date'}
+          id={'creator-field-start-date'}
+          name={'startDate'}
+          type={'date'}
+          value={state.result?.startDate} // TODO: THIS MUST BE RESTICTED FOR WEEKLY/MONTHLY/YEARLY MODES
+          required
+          label={'Start date:'}
+          description={
+            'When are you starting? Select a date in the past if you are already following your new habit.'
+          }
+          onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
+        />
+      ),
+      isValid: (result: IHabit) =>
+        typeof result.startDate === 'string' && result.startDate.length > 0,
+    },
+    {
+      component: (
+        <FormField
+          key={'creator-field-end-date'}
+          id={'creator-field-end-date'}
+          name={'endDate'}
+          type={'date'}
+          value={state.result?.endDate} // TODO: THIS MUST BE RESTICTED FOR WEEKLY/MONTHLY/YEARLY MODES
+          label={'End date:'}
+          description={
+            'Is there a date in the future when you would like to remove or modify this habit? If so, then provide it here. When time comes, we will notify you that your habit needs an update.'
+          }
+          externalIsValid={
+            !state.result?.endDate ||
+            (typeof state.result?.endDate === 'string' &&
+              typeof state.result?.startDate === 'string' &&
+              (state.result?.endDate.length === 0 ||
+                (state.result?.endDate.length > 0 &&
+                  state.result?.endDate >= state.result?.startDate)))
+          }
+          onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
+        />
+      ),
+      isValid: (result: IHabit) =>
+        !result.endDate ||
+        (typeof result.endDate === 'string' &&
+          typeof result.startDate === 'string' &&
+          (result.endDate.length === 0 ||
+            (result.endDate.length > 0 && result.endDate >= result.startDate))),
+    },
+    {
+      component: (
+        <FormField
+          key={'creator-field-default-realization-value'}
+          id={'creator-field-default-realization-value'}
+          name={'defaultRealizationValue'}
+          type={'select'}
+          options={[
+            { value: '', text: 'Select option' },
+            { value: 'DONE', text: 'Done' },
+            { value: 'WAITING', text: 'Waiting' },
+            { value: 'NOT-DONE', text: 'Not done' },
+          ]}
+          required
+          label={'Default habit status:'}
+          description={
+            'Your habit can be marked as "done", "waiting" or "not done" for each period it is applied (day, week, month, etc.). For example, a "daily" habit will be marked as "waiting" at the beginning of a new day. If you do not change its state to "done" or not done" by the end of the day, it will update to this value automatically. Note that you can change habit status for given period later on.'
+          }
+          value={state.result?.defaultRealizationValue}
+          onChange={(e: React.FormEvent<HTMLSelectElement>) => changeValue(e)}
+        />
+      ),
+      isValid: (result: IHabit) =>
+        typeof result.defaultRealizationValue === 'string' &&
+        result.defaultRealizationValue.length > 0,
+    },
+    {
+      component: (
+        <FormField
+          key={'creator-field-description'}
+          id={'creator-field-description'}
+          name={'description'}
+          type={'textarea'}
+          value={state.result?.description}
+          label={'Description:'}
+          description={'Short description or notes about your new habit'}
+          onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
+        />
+      ),
+    },
+    {
+      component: (
+        <div key={'creator-field-done'}>
+          <p>All done</p>
+        </div>
+      ),
+    },
   ];
 };
 

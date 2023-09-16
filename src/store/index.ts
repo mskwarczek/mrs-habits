@@ -3,6 +3,8 @@ export type { IGoal, IGoalsState } from './slices/goalsSlice';
 export type {
   IHabit,
   IHabitsState,
+  THabitRealization,
+  THabitRealizationValue,
   TStandardHabitFreq,
   THabitFreq,
 } from './slices/habitsSlice';

@@ -36,6 +36,7 @@ interface IFormFieldProps {
   multiple?: boolean;
   description?: string;
   label?: string;
+  externalIsValid?: boolean;
   onChange?: (...args: any[]) => void;
 }
 
@@ -50,9 +51,15 @@ const FormField = ({
   multiple,
   label,
   description,
+  externalIsValid,
   onChange,
 }: IFormFieldProps) => {
-  const isValid = !required || (required && value.length) ? true : false;
+  const isValid =
+    externalIsValid !== undefined
+      ? externalIsValid
+      : !required || (required && value.length)
+      ? true
+      : false;
 
   return (
     <div>

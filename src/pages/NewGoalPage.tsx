@@ -56,7 +56,7 @@ const NewGoalPage = () => {
     };
     dispatch(createGoal(newGoalObj))
       .unwrap()
-      .then((result) => {
+      .then((result: IGoal) => {
         if (user.uid && result.id) {
           dispatch(addUserGoal({ userId: user.uid, goalId: result.id }));
         }
