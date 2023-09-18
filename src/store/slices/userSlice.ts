@@ -5,7 +5,13 @@ import {
 } from '@reduxjs/toolkit';
 import { getDoc, setDoc, updateDoc, collection, doc } from 'firebase/firestore';
 
-import { db, getUserGoals, getUserHabits } from '../index';
+import {
+  db,
+  IHabit,
+  getUserGoals,
+  getUserHabits,
+  updateHabits,
+} from '../index';
 
 export interface IUser {
   uid?: string;
@@ -34,6 +40,16 @@ const initialState: IUserState = {
   error: undefined,
 };
 
+const shouldHabitsUpdate = (data: IHabit[] | undefined) => {
+  if (!data) return false;
+  let shouldUpdate = false;
+  data.map((habit) => {
+    if (!habit.meta?.updatedAt || new Date(habit.meta?.updatedAt) < new Date())
+      shouldUpdate = true;
+  });
+  return shouldUpdate;
+};
+
 export const initUser = createAsyncThunk(
   'initUser',
   async (uid: string, thunkAPI) => {
@@ -45,7 +61,13 @@ export const initUser = createAsyncThunk(
         const goals = userData?.goals;
         const habits = userData?.habits;
         if (goals && goals.length) thunkAPI.dispatch(getUserGoals(goals));
-        if (habits && habits.length) thunkAPI.dispatch(getUserHabits(habits));
+        if (habits && habits.length)
+          thunkAPI
+            .dispatch(getUserHabits(habits))
+            .unwrap()
+            .then((result) => {
+              if (shouldHabitsUpdate(result)) thunkAPI.dispatch(updateHabits());
+            });
         return { uid, goals, habits } as IUser;
       } else {
         const usersRef = collection(db, 'users');

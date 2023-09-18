@@ -10,7 +10,6 @@ export const getTimeSinceDate = (date: string | Date) => {
 };
 
 export const addDays = (date: string | Date, days: number) => {
-  if (typeof date === 'string') date = new Date(date);
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;

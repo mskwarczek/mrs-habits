@@ -24,6 +24,7 @@ interface ISelectProps {
   options?: {
     value: string;
     text: string;
+    disabled?: boolean;
   }[];
   disabled?: boolean;
   required?: boolean;
@@ -55,6 +56,7 @@ const Select = ({
         <option
           key={option.value}
           value={option.value}
+          disabled={option.disabled}
         >
           {option.text}
         </option>

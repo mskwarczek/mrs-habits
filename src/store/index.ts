@@ -25,6 +25,7 @@ export {
   getUserHabits,
   createHabit,
   clearHabits,
+  updateHabits,
 } from './slices/habitsSlice';
 export {
   userSlice,

@@ -30,6 +30,7 @@ interface IFormFieldProps {
   options?: {
     value: string;
     text: string;
+    disabled?: boolean;
   }[];
   disabled?: boolean;
   required?: boolean;

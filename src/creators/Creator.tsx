@@ -9,7 +9,6 @@ import {
   IHabit,
   THabitRealizationValue,
   TStandardHabitFreq,
-  IGoal,
 } from '../store';
 import { getTimeSinceDate, addDays } from '../utils/datetime';
 
@@ -39,6 +38,7 @@ export type TCreatorAction =
         owner: string;
         meta: {
           createdAt: string;
+          updatedAt: string;
           createdBy: string;
         };
       };
@@ -91,11 +91,11 @@ export const creatorReducer = (
             if (nested[1] === 'type') {
               if (
                 payload.value === '' ||
-                payload.value === 'HOURLY' ||
+                // || payload.value === 'HOURLY'
                 payload.value === 'DAILY' ||
-                payload.value === 'WEEKLY' ||
-                payload.value === 'MONTHLY' ||
-                payload.value === 'YEARLY'
+                payload.value === 'WEEKLY'
+                // || payload.value === 'MONTHLY' ||
+                // || payload.value === 'YEARLY'
               ) {
                 return {
                   ...state,
@@ -131,23 +131,34 @@ export const creatorReducer = (
         },
       };
     case CreatorActions.ADD_REALIZATION_DATA: {
+      // TODO: this works only for days dow
       if (!state.result?.startDate) return state; // TODO: error and / or step change
       if (!state.result?.defaultRealizationValue) return state; // TODO: error and / or step change
-      const periodsData = getTimeSinceDate(state.result.startDate);
-      const periods = periodsData.days;
-      const periodsArray = [];
-      for (let i = 0; i <= periods; i++) {
-        const status: THabitRealizationValue = i < periods ? 'DONE' : 'WAITING';
-        periodsArray.push({
-          date: addDays(state.result.startDate, i).toString(),
-          status,
-        });
+      const days = getTimeSinceDate(state.result.startDate).days;
+      const realizationArray = [];
+      if (days >= 0) {
+        const today = new Date().setHours(0, 0, 0, 0);
+        let selectedDay = new Date(state.result?.startDate);
+        let selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
+        while (selectedDayHours <= today) {
+          const date = selectedDay.toString();
+          const dayStatus: THabitRealizationValue =
+            selectedDayHours < today
+              ? state.result?.defaultRealizationValue
+              : 'EMPTY';
+          realizationArray.push({
+            date,
+            dayStatus,
+          });
+          selectedDay = addDays(selectedDay, 1);
+          selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
+        }
       }
       return {
         ...state,
         result: {
           ...state.result,
-          realization: periodsArray,
+          realization: realizationArray,
         },
       };
     }
@@ -229,6 +240,7 @@ export const Creator = ({
         owner: user.uid,
         meta: {
           createdAt: new Date().toString(),
+          updatedAt: new Date().toString(),
           createdBy: user.uid,
         },
       },

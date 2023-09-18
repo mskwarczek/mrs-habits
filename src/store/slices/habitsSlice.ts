@@ -3,9 +3,16 @@ import {
   createAsyncThunk,
   SerializedError,
 } from '@reduxjs/toolkit';
-import { getDocs, addDoc, collection } from 'firebase/firestore';
+import {
+  doc,
+  getDocs,
+  addDoc,
+  collection,
+  writeBatch,
+} from 'firebase/firestore';
 
 import { db } from '../index';
+import { addDays } from '../../utils/datetime';
 
 export type TStandardHabitFreq =
   | 'HOURLY'
@@ -27,10 +34,10 @@ export type THabitFreq = { category: 'STANDARD'; type: TStandardHabitFreq };
 
 // type TReminder = 'APP' | 'NOTIFICATION' | 'EMAIL'; // TODO
 
-export type THabitRealizationValue = 'DONE' | 'WAITING' | 'NOT-DONE';
+export type THabitRealizationValue = 'DONE' | 'EMPTY' | 'NOT-DONE';
 export type THabitRealization = {
   date: string;
-  status: THabitRealizationValue;
+  dayStatus: THabitRealizationValue;
   note?: string;
 };
 
@@ -40,6 +47,7 @@ export interface IHabit {
   meta?: {
     createdBy?: string;
     createdAt?: string;
+    updatedAt?: string;
   };
   name?: string;
   frequency?: THabitFreq;
@@ -103,6 +111,74 @@ export const createHabit = createAsyncThunk(
   },
 );
 
+export const updateHabits = createAsyncThunk(
+  'updateHabits',
+  async (_, thunkAPI) => {
+    try {
+      const batch = writeBatch(db);
+      const updateData = new Map();
+      const { habits } = thunkAPI.getState() as { habits: IHabitsState };
+      habits.data?.map((habit) => {
+        if (
+          typeof habit.id !== 'undefined' &&
+          typeof habit.realization !== 'undefined' &&
+          typeof habit.startDate != 'undefined' &&
+          typeof habit.defaultRealizationValue != 'undefined' &&
+          typeof habit.frequency != 'undefined'
+        ) {
+          const docRef = doc(db, 'habits', habit.id);
+          const realization: THabitRealization[] = habit.realization.map(
+            (a) => {
+              return { ...a };
+            },
+          );
+          const today = new Date().setHours(0, 0, 0, 0);
+          let selectedDay = new Date(habit.startDate);
+          let selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
+          if (realization.length > 0) {
+            const lastRealization = realization[realization.length - 1];
+            if (
+              new Date(lastRealization.date).setHours(0, 0, 0, 0) < today &&
+              habit.frequency.type === 'DAILY' &&
+              lastRealization.dayStatus === 'EMPTY'
+            )
+              realization[realization.length - 1].dayStatus =
+                habit.defaultRealizationValue;
+            selectedDay = addDays(new Date(lastRealization.date), 1);
+            selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
+          }
+          while (selectedDayHours <= today) {
+            const date = selectedDay.toString();
+            const dayStatus: THabitRealizationValue =
+              selectedDayHours < today
+                ? habit.defaultRealizationValue
+                : 'EMPTY';
+            realization.push({
+              date,
+              dayStatus,
+            });
+            selectedDay = addDays(selectedDay, 1);
+            selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
+          }
+          batch.update(docRef, { realization: realization });
+          batch.update(docRef, { 'meta.updatedAt': today.toString() });
+          updateData.set(habit.id, realization);
+        }
+      });
+      await batch.commit();
+      return {
+        updateData,
+        updatedAt: new Date().toString(),
+      };
+    } catch (error) {
+      console.error('ERROR!', error);
+      if (error instanceof Error)
+        return thunkAPI.rejectWithValue({ error: error.message });
+      else return thunkAPI.rejectWithValue({ error });
+    }
+  },
+);
+
 export const habitsSlice = createSlice({
   name: 'habits',
   initialState,
@@ -124,6 +200,20 @@ export const habitsSlice = createSlice({
       else state.data = [action.payload];
     });
     builder.addCase(createHabit.rejected, (state, action) => {
+      state.error = action.error;
+    });
+    builder.addCase(updateHabits.fulfilled, (state, action) => {
+      state.data?.forEach((habit) => {
+        if (habit.id) {
+          if (action.payload.updateData.has(habit.id)) {
+            const updateData = action.payload.updateData.get(habit.id);
+            habit.realization = updateData;
+            if (habit.meta) habit.meta.updatedAt = action.payload.updatedAt;
+          }
+        }
+      });
+    });
+    builder.addCase(updateHabits.rejected, (state, action) => {
       state.error = action.error;
     });
   },

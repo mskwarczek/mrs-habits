@@ -44,7 +44,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
               { value: '', text: 'Select option' },
               // { value: 'HOURLY', text: 'Once per hour' }, // TODO
               { value: 'DAILY', text: 'Once a day or continuously' },
-              // { value: 'WEEKLY', text: 'Once a week' }, // TODO
+              { value: 'WEEKLY', text: 'Once a week' },
               // { value: 'MONTHLY', text: 'Once a month' }, // TODO
               // { value: 'YEARLY', text: 'Every year' }, // TODO
             ]}
@@ -118,14 +118,29 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           type={'select'}
           options={[
             { value: '', text: 'Select option' },
-            { value: 'DONE', text: 'Done' },
-            { value: 'WAITING', text: 'Waiting' },
-            { value: 'NOT-DONE', text: 'Not done' },
+            {
+              value: 'DONE',
+              text: 'Done',
+              disabled:
+                state.result?.frequency?.type === 'DAILY' ? false : true,
+            },
+            {
+              value: 'EMPTY',
+              text: 'Empty',
+              disabled:
+                state.result?.frequency?.type === 'DAILY' ? true : false,
+            },
+            {
+              value: 'NOT-DONE',
+              text: 'Not done',
+              disabled:
+                state.result?.frequency?.type === 'DAILY' ? false : true,
+            },
           ]}
           required
           label={'Default habit status:'}
           description={
-            'Your habit can be marked as "done", "waiting" or "not done" for each period it is applied (day, week, month, etc.). For example, a "daily" habit will be marked as "waiting" at the beginning of a new day. If you do not change its state to "done" or not done" by the end of the day, it will update to this value automatically. Note that you can change habit status for given period later on.'
+            'Your habit can be marked as "done", "empty" or "not done" for each day it is applied. Evey new day is maked as "empty". If you do not change state of a "daily" habit to "done" or "not done" by the end of the day, it will update to this value automatically. Other types of habits will always keep "empty" status unless changed by the user.'
           }
           value={state.result?.defaultRealizationValue}
           onChange={(e: React.FormEvent<HTMLSelectElement>) => changeValue(e)}
