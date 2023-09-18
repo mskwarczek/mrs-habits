@@ -12,7 +12,7 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '../index';
-import { addDays } from '../../utils/datetime';
+import { getProperDateString, addDays } from '../../utils/datetime';
 
 export type TStandardHabitFreq =
   | 'HOURLY'
@@ -148,7 +148,7 @@ export const updateHabits = createAsyncThunk(
             selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
           }
           while (selectedDayHours <= today) {
-            const date = selectedDay.toString();
+            const date = getProperDateString(selectedDay);
             const dayStatus: THabitRealizationValue =
               selectedDayHours < today
                 ? habit.defaultRealizationValue
@@ -161,14 +161,14 @@ export const updateHabits = createAsyncThunk(
             selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
           }
           batch.update(docRef, { realization: realization });
-          batch.update(docRef, { 'meta.updatedAt': today.toString() });
+          batch.update(docRef, { 'meta.updatedAt': new Date().toISOString() });
           updateData.set(habit.id, realization);
         }
       });
       await batch.commit();
       return {
         updateData,
-        updatedAt: new Date().toString(),
+        updatedAt: new Date().toISOString(),
       };
     } catch (error) {
       console.error('ERROR!', error);

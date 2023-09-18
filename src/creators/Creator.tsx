@@ -10,7 +10,11 @@ import {
   THabitRealizationValue,
   TStandardHabitFreq,
 } from '../store';
-import { getTimeSinceDate, addDays } from '../utils/datetime';
+import {
+  getProperDateString,
+  getTimeSinceDate,
+  addDays,
+} from '../utils/datetime';
 
 enum CreatorActions {
   NEXT_STEP = 'NEXT_STEP',
@@ -131,7 +135,6 @@ export const creatorReducer = (
         },
       };
     case CreatorActions.ADD_REALIZATION_DATA: {
-      // TODO: this works only for days dow
       if (!state.result?.startDate) return state; // TODO: error and / or step change
       if (!state.result?.defaultRealizationValue) return state; // TODO: error and / or step change
       const days = getTimeSinceDate(state.result.startDate).days;
@@ -141,7 +144,7 @@ export const creatorReducer = (
         let selectedDay = new Date(state.result?.startDate);
         let selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
         while (selectedDayHours <= today) {
-          const date = selectedDay.toString();
+          const date = getProperDateString(selectedDay);
           const dayStatus: THabitRealizationValue =
             selectedDayHours < today
               ? state.result?.defaultRealizationValue
@@ -239,8 +242,8 @@ export const Creator = ({
       payload: {
         owner: user.uid,
         meta: {
-          createdAt: new Date().toString(),
-          updatedAt: new Date().toString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
           createdBy: user.uid,
         },
       },

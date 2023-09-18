@@ -1,3 +1,10 @@
+export const getProperDateString = (date: string | Date) => {
+  if (typeof date === 'string') date = new Date(date);
+  const offset = date.getTimezoneOffset();
+  date = new Date(date.getTime() - offset * 60 * 1000);
+  return date.toISOString().substring(0, 10);
+};
+
 export const getTimeSinceDate = (date: string | Date) => {
   const today = new Date();
   if (typeof date === 'string') date = new Date(date);

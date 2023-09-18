@@ -44,7 +44,7 @@ const shouldHabitsUpdate = (data: IHabit[] | undefined) => {
   if (!data) return false;
   let shouldUpdate = false;
   data.map((habit) => {
-    if (!habit.meta?.updatedAt || new Date(habit.meta?.updatedAt) < new Date())
+    if (!habit.meta?.updatedAt || new Date(habit.meta?.updatedAt).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0))
       shouldUpdate = true;
   });
   return shouldUpdate;
