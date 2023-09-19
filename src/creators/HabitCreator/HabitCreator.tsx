@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { FormField } from '../../components';
 import { Creator, ICreatorSteps } from '../Creator';
-import { createHabit, addUserHabit, IHabit } from '../../store';
+import { createHabit, addUserHabit, IHabitTemplate } from '../../store';
 
 const StyledFieldsGroup = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
         />
       ),
-      isValid: (result: IHabit) =>
+      isValid: (result: IHabitTemplate) =>
         typeof result.name === 'string' && result.name.length > 0,
     },
     {
@@ -56,7 +56,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           />
         </StyledFieldsGroup>
       ),
-      isValid: (result: IHabit) =>
+      isValid: (result: IHabitTemplate) =>
         typeof result.frequency?.type === 'string' &&
         result.frequency.type.length > 0,
     },
@@ -76,7 +76,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
         />
       ),
-      isValid: (result: IHabit) =>
+      isValid: (result: IHabitTemplate) =>
         typeof result.startDate === 'string' && result.startDate.length > 0,
     },
     {
@@ -102,7 +102,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
         />
       ),
-      isValid: (result: IHabit) =>
+      isValid: (result: IHabitTemplate) =>
         !result.endDate ||
         (typeof result.endDate === 'string' &&
           typeof result.startDate === 'string' &&
@@ -146,7 +146,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           onChange={(e: React.FormEvent<HTMLSelectElement>) => changeValue(e)}
         />
       ),
-      isValid: (result: IHabit) =>
+      isValid: (result: IHabitTemplate) =>
         typeof result.defaultRealizationValue === 'string' &&
         result.defaultRealizationValue.length > 0,
     },

@@ -1,15 +1,19 @@
-export type { IAuthState, IAuthPayload } from './slices/authSlice';
+export type { IAuthState } from './slices/authSlice';
 export type { IGoal, IGoalsState } from './slices/goalsSlice';
+export type { IHabitsState } from './slices/habitsSlice';
+export type { IUserState, IUserGoalPayload } from './slices/userSlice';
+export type { TRootState, TAppDispatch } from './store';
+
+export type { IAuth, IAuthTemplate } from './types/auth';
 export type {
   IHabit,
-  IHabitsState,
+  IHabitTemplate,
   THabitRealization,
   THabitRealizationValue,
   TStandardHabitFreq,
   THabitFreq,
-} from './slices/habitsSlice';
-export type { IUser, IUserState, IUserGoalPayload } from './slices/userSlice';
-export type { TRootState, TAppDispatch } from './store';
+} from './types/habit';
+export type { IUser, IUserTemplate } from './types/user';
 
 export { app, db } from '../services/firebase';
 export { useAppDispatch, useAppSelector } from './hooks';

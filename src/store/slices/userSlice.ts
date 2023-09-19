@@ -6,20 +6,16 @@ import {
 import { getDoc, setDoc, updateDoc, collection, doc } from 'firebase/firestore';
 
 import {
-  db,
+  IUser,
   IHabit,
+  db,
   getUserGoals,
   getUserHabits,
   updateHabits,
 } from '../index';
 
-export interface IUser {
-  uid?: string;
-  goals?: string[];
-  habits?: string[];
-}
-
-export interface IUserState extends IUser {
+export interface IUserState {
+  data?: IUser;
   error?: SerializedError;
 }
 
@@ -34,9 +30,7 @@ export interface IUserHabitPayload {
 }
 
 const initialState: IUserState = {
-  uid: undefined,
-  goals: undefined,
-  habits: undefined,
+  data: undefined,
   error: undefined,
 };
 
@@ -44,7 +38,11 @@ const shouldHabitsUpdate = (data: IHabit[] | undefined) => {
   if (!data) return false;
   let shouldUpdate = false;
   data.map((habit) => {
-    if (!habit.meta?.updatedAt || new Date(habit.meta?.updatedAt).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0))
+    if (
+      !habit.meta?.updatedAt ||
+      new Date(habit.meta?.updatedAt).setHours(0, 0, 0, 0) <
+        new Date().setHours(0, 0, 0, 0)
+    )
       shouldUpdate = true;
   });
   return shouldUpdate;
@@ -102,7 +100,7 @@ export const addUserGoal = createAsyncThunk(
           return {
             uid: userId,
             goals: [...goals, goalId],
-          } as IUser;
+          };
         } else {
           throw new Error(
             `Error in action addUserGoal. Goal with given ID (${goalId}) already exists on this user (${userId}).`,
@@ -138,7 +136,7 @@ export const addUserHabit = createAsyncThunk(
           return {
             uid: userId,
             habits: [...habits, habitId],
-          } as IUser;
+          };
         } else {
           throw new Error(
             `Error in action addUserHabit. Habit with given ID (${habitId}) already exists on this user (${userId}).`,
@@ -163,31 +161,27 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     clearUser(state) {
-      state.uid = initialState.uid;
-      state.goals = initialState.goals;
-      state.habits = initialState.habits;
+      state.data = initialState.data;
       state.error = initialState.error;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(initUser.fulfilled, (state, action) => {
-      state.uid = action.payload.uid;
-      state.goals = action.payload.goals;
-      state.habits = action.payload.habits;
+      state.data = action.payload;
     });
     builder.addCase(initUser.rejected, (state, action) => {
       state.error = action.error;
     });
     builder.addCase(addUserGoal.fulfilled, (state, action) => {
-      state.uid = action.payload.uid;
-      state.goals = action.payload.goals;
+      if (state.data && state.data.uid === action.payload.uid)
+        state.data.goals = action.payload.goals;
     });
     builder.addCase(addUserGoal.rejected, (state, action) => {
       state.error = action.error;
     });
     builder.addCase(addUserHabit.fulfilled, (state, action) => {
-      state.uid = action.payload.uid;
-      state.habits = action.payload.habits;
+      if (state.data && state.data.uid === action.payload.uid)
+        state.data.habits = action.payload.habits;
     });
     builder.addCase(addUserHabit.rejected, (state, action) => {
       state.error = action.error;

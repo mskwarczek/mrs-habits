@@ -7,6 +7,7 @@ import {
   useAppDispatch,
   useAppSelector,
   IHabit,
+  IHabitTemplate,
   THabitRealizationValue,
   TStandardHabitFreq,
 } from '../store';
@@ -49,7 +50,7 @@ export type TCreatorAction =
     }
   | { type: CreatorActions.ADD_REALIZATION_DATA; payload?: undefined };
 
-type TCreatorResult = IHabit;
+type TCreatorResult = IHabitTemplate;
 
 export interface ICreatorState {
   step: number;
@@ -236,22 +237,21 @@ export const Creator = ({
   };
 
   const addMetaData = () => {
-    if (!user.uid) return;
+    if (!user.data) return;
     dispatch({
       type: CreatorActions.ADD_META_DATA,
       payload: {
-        owner: user.uid,
+        owner: user.data.uid,
         meta: {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
-          createdBy: user.uid,
+          createdBy: user.data.uid,
         },
       },
     });
   };
 
   const addRealizationData = () => {
-    if (!user.uid) return;
     dispatch({
       type: CreatorActions.ADD_REALIZATION_DATA,
     });
@@ -262,9 +262,8 @@ export const Creator = ({
     appDispatch(documentCreationFn(state.result))
       .unwrap()
       .then((result: IHabit) => {
-        if (user.uid && result.id) {
-          appDispatch(helperFn({ userId: user.uid, habitId: result.id }));
-        }
+        if (user.data)
+          appDispatch(helperFn({ userId: user.data.uid, habitId: result.id }));
       })
       .then(() =>
         dispatch({

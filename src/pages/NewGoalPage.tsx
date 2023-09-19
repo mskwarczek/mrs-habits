@@ -45,11 +45,12 @@ const NewGoalPage = () => {
   };
 
   const handleSaveGoal = () => {
+    if (!user.data) return;
     const newGoalObj: IGoal = {
       name,
       createdAt: new Date().toISOString(),
-      createdBy: user.uid,
-      owner: user.uid,
+      createdBy: user.data.uid,
+      owner: user.data.uid,
       startDate,
       endDate,
       description,
@@ -57,8 +58,8 @@ const NewGoalPage = () => {
     dispatch(createGoal(newGoalObj))
       .unwrap()
       .then((result: IGoal) => {
-        if (user.uid && result.id) {
-          dispatch(addUserGoal({ userId: user.uid, goalId: result.id }));
+        if (user.data && user.data.uid && result.id) {
+          dispatch(addUserGoal({ userId: user.data.uid, goalId: result.id }));
         }
         // some nav here
       });

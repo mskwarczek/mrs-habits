@@ -17,7 +17,13 @@ const StyledCard = styled.div`
   border-radius: ${({ theme }) => theme.borderRad.m};
 `;
 
-const HabitCard = ({ id, name, startDate, endDate, description }: IHabit) => {
+interface IHabitCardProps {
+  habit: IHabit;
+}
+
+const HabitCard = ({
+  habit: { id, name, startDate, endDate, description },
+}: IHabitCardProps) => {
   const navigate = useNavigate();
 
   const handleNav = (endpoint: string) => {

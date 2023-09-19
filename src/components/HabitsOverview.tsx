@@ -24,11 +24,7 @@ const HabitsOverview = () => {
           habits.map((habit) => (
             <HabitCard
               key={habit.id}
-              id={habit.id}
-              name={habit.name}
-              startDate={habit.startDate}
-              endDate={habit.endDate}
-              description={habit.description}
+              habit={habit}
             />
           ))
         ) : (
