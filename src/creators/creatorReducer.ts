@@ -127,9 +127,10 @@ export const creatorReducer = (
       const realizationArray = [];
       if (days >= 0) {
         const today = new Date().setHours(0, 0, 0, 0);
+        const endDate = state.result?.endDate ? new Date(state.result?.endDate).setHours(0, 0, 0, 0) : false;
         let selectedDay = new Date(state.result?.startDate);
         let selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
-        while (selectedDayHours <= today) {
+        while (selectedDayHours <= today && (!endDate || selectedDayHours <= endDate)) {
           const date = getProperDateString(selectedDay);
           const dayStatus: THabitRealizationValue =
             selectedDayHours < today
