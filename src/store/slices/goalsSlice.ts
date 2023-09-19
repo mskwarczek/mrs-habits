@@ -3,14 +3,14 @@ import {
   createAsyncThunk,
   SerializedError,
 } from '@reduxjs/toolkit';
-import { addDoc, collection } from 'firebase/firestore';
+import { getDocs, addDoc, collection } from 'firebase/firestore';
 
 import { db } from '../index';
 
 export interface IGoal {
   name: string;
   id?: string;
-  createdAt?: Date;
+  createdAt?: string;
   createdBy?: string;
   owner?: string;
   startDate?: string;
@@ -28,6 +28,26 @@ const initialState: IGoalsState = {
   error: undefined,
 };
 
+export const getUserGoals = createAsyncThunk(
+  'getUserGoals',
+  async (goals: string[], thunkAPI) => {
+    try {
+      const goalsToAdd: IGoal[] = [];
+      const response = await getDocs(collection(db, 'goals'));
+      response.forEach((doc) => {
+        if (goals.includes(doc.id))
+          goalsToAdd.push(<IGoal>{ ...doc.data(), id: doc.id });
+      });
+      return goalsToAdd as IGoal[];
+    } catch (error) {
+      console.error('ERROR!', error);
+      if (error instanceof Error)
+        return thunkAPI.rejectWithValue({ error: error.message });
+      else return thunkAPI.rejectWithValue({ error });
+    }
+  },
+);
+
 export const createGoal = createAsyncThunk(
   'createGoal',
   async (goal: IGoal, thunkAPI) => {
@@ -36,6 +56,7 @@ export const createGoal = createAsyncThunk(
       const docRef = await addDoc(goalsRef, goal);
       return { ...goal, id: docRef.id } as IGoal;
     } catch (error) {
+      console.error('ERROR!', error);
       if (error instanceof Error)
         return thunkAPI.rejectWithValue({ error: error.message });
       else return thunkAPI.rejectWithValue({ error });
@@ -53,6 +74,12 @@ export const goalsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getUserGoals.fulfilled, (state, action) => {
+      state.data = action.payload;
+    });
+    builder.addCase(getUserGoals.rejected, (state, action) => {
+      state.error = action.error;
+    });
     builder.addCase(createGoal.fulfilled, (state, action) => {
       if (state.data) state.data.push(action.payload);
       else state.data = [action.payload];

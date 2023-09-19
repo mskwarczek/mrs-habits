@@ -39,7 +39,7 @@ const UserPanel = () => {
 
   return (
     <StyledWrapper>
-      {user.displayName ? <p>Welcome {user.displayName}!</p> : null}
+      {user.data?.displayName ? <p>Welcome {user.data.displayName}!</p> : null}
       {user.authenticated ? (
         <Button
           text={'Home'}

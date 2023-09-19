@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledInput = styled.input`
+const StyledSelect = styled.select`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,36 +17,52 @@ const StyledInput = styled.input`
   line-height: ${({ theme }) => theme.lineHeight.m};
 `;
 
-interface IInputProps {
+interface ISelectProps {
   id: string;
   name?: string;
-  type?: string;
-  value?: string | number;
+  value?: string;
+  options?: {
+    value: string;
+    text: string;
+    disabled?: boolean;
+  }[];
   disabled?: boolean;
   required?: boolean;
+  multiple?: boolean;
   onChange?: (...args: any[]) => void;
 }
 
-const Input = ({
+const Select = ({
   id,
   name,
-  type = 'text',
-  value = '',
+  value,
+  options = [],
   disabled,
   required,
+  multiple,
   onChange,
-}: IInputProps) => {
+}: ISelectProps) => {
   return (
-    <StyledInput
+    <StyledSelect
       id={id}
       name={name}
-      type={type}
       value={value}
       disabled={disabled}
       required={required}
+      multiple={multiple}
       onChange={onChange}
-    />
+    >
+      {options.map((option) => (
+        <option
+          key={option.value}
+          value={option.value}
+          disabled={option.disabled}
+        >
+          {option.text}
+        </option>
+      ))}
+    </StyledSelect>
   );
 };
 
-export default Input;
+export default Select;

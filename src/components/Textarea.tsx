@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledInput = styled.input`
+const StyledTextarea = styled.textarea`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,27 +20,24 @@ const StyledInput = styled.input`
 interface IInputProps {
   id: string;
   name?: string;
-  type?: string;
-  value?: string | number;
+  value?: string;
   disabled?: boolean;
   required?: boolean;
   onChange?: (...args: any[]) => void;
 }
 
-const Input = ({
+const Textarea = ({
   id,
   name,
-  type = 'text',
   value = '',
   disabled,
   required,
   onChange,
 }: IInputProps) => {
   return (
-    <StyledInput
+    <StyledTextarea
       id={id}
       name={name}
-      type={type}
       value={value}
       disabled={disabled}
       required={required}
@@ -49,4 +46,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default Textarea;

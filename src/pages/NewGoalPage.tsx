@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, Input } from '../components';
+import { Button, FormField } from '../components';
 import {
   TRootState,
   useAppDispatch,
@@ -45,20 +45,21 @@ const NewGoalPage = () => {
   };
 
   const handleSaveGoal = () => {
+    if (!user.data) return;
     const newGoalObj: IGoal = {
       name,
-      createdAt: new Date(),
-      createdBy: user.uid,
-      owner: user.uid,
+      createdAt: new Date().toISOString(),
+      createdBy: user.data.uid,
+      owner: user.data.uid,
       startDate,
       endDate,
       description,
     };
     dispatch(createGoal(newGoalObj))
       .unwrap()
-      .then((result) => {
-        if (user.uid && result.id) {
-          dispatch(addUserGoal({ userId: user.uid, goalId: result.id }));
+      .then((result: IGoal) => {
+        if (user.data && user.data.uid && result.id) {
+          dispatch(addUserGoal({ userId: user.data.uid, goalId: result.id }));
         }
         // some nav here
       });
@@ -68,7 +69,7 @@ const NewGoalPage = () => {
     <main>
       Create a new goal
       <StyledWrapper>
-        <Input
+        <FormField
           id={'new-goal-name'}
           type={'text'}
           value={name}
@@ -76,21 +77,21 @@ const NewGoalPage = () => {
           label={'Goal name: '}
           onChange={(e) => handleNameChange(e)}
         />
-        <Input
+        <FormField
           id={'new-goal-start-date'}
           type={'date'}
           value={startDate}
           label={'When are you starting: '}
           onChange={(e) => handleStartDateChange(e)}
         />
-        <Input
+        <FormField
           id={'new-goal-end-date'}
           type={'date'}
           value={endDate}
           label={'When do you plan to fulfill your goal?: '}
           onChange={(e) => handleEndDateChange(e)}
         />
-        <Input
+        <FormField
           id={'new-goal-description'}
           type={'textarea'}
           value={description}
