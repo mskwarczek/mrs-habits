@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { Portal, Button } from './index';
+import { hextToRgbaString } from '../utils/colors';
 
 const StyledModalBackdrop = styled.div`
   position: absolute;
@@ -12,7 +13,8 @@ const StyledModalBackdrop = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.color.bg.secondary};
+  background-color: ${({ theme }) =>
+    hextToRgbaString(theme.color.bg.secondary, 0.8)};
 `;
 
 const StyledModal = styled.div`
@@ -25,7 +27,9 @@ const StyledModal = styled.div`
 const StyledModalTop = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.space.m};
 `;
 
 const StyledModalBody = styled.div`
@@ -35,11 +39,18 @@ const StyledModalBody = styled.div`
 interface IModalProps {
   isOpen: boolean;
   children: React.ReactNode;
+  title?: string;
   portalId?: string;
   closeModal: (...args: any[]) => void;
 }
 
-const Modal = ({ children, isOpen, portalId, closeModal }: IModalProps) => {
+const Modal = ({
+  children,
+  isOpen,
+  title,
+  portalId,
+  closeModal,
+}: IModalProps) => {
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) =>
       e.key === 'Escape' ? closeModal() : null;
@@ -56,6 +67,7 @@ const Modal = ({ children, isOpen, portalId, closeModal }: IModalProps) => {
       <StyledModalBackdrop onClick={() => closeModal()}>
         <StyledModal onClick={(e) => e.stopPropagation()}>
           <StyledModalTop>
+            <h2>{title}</h2>
             <Button
               text={'X'}
               action={closeModal}

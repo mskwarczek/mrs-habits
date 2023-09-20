@@ -26,6 +26,7 @@ const CreatorSection = ({ type }: ICreatorSection) => {
           {isModalOpen && (
             <Modal
               isOpen={isModalOpen}
+              title={'New habit creator'}
               portalId={'creator-modal-portal-wrapper'}
               closeModal={() => dispatch(closeCreatorModal())}
             >

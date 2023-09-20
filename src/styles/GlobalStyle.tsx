@@ -28,6 +28,13 @@ const GlobalStyle = createGlobalStyle`
     outline: inherit;
     border: none;
   }
+
+  h2 {
+    color: ${({ theme }) => theme.color.text.primary};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
+    font-size: ${({ theme }) => theme.fontSize.l};
+    line-height: ${({ theme }) => theme.lineHeight.l};
+  }
 `;
 
 export default GlobalStyle;
