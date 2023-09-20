@@ -1,6 +1,7 @@
 export type { IAuthState } from './slices/authSlice';
 export type { IGoal, IGoalsState } from './slices/goalsSlice';
 export type { IHabitsState } from './slices/habitsSlice';
+export type { IModalsState, IModal } from './slices/modalsSlice';
 export type { IUserState, IUserGoalPayload } from './slices/userSlice';
 export type { TRootState, TAppDispatch } from './store';
 
@@ -38,4 +39,9 @@ export {
   addUserHabit,
   clearUser,
 } from './slices/userSlice';
+export {
+  modalsSlice,
+  openCreatorModal,
+  closeCreatorModal,
+} from './slices/modalsSlice';
 export { store } from './store';

@@ -43,9 +43,16 @@ const shouldHabitsUpdate = (data: IHabit[] | undefined) => {
       const updatedAt = new Date(habit.meta?.updatedAt).setHours(0, 0, 0, 0);
       const today = new Date().setHours(0, 0, 0, 0);
       const startDate = new Date(habit.startDate).setHours(0, 0, 0, 0);
-      const endDate = habit.endDate ? new Date(habit.endDate).setHours(0, 0, 0, 0) : false;
-      if (updatedAt < today && startDate <= today && (!endDate || updatedAt <= endDate)) shouldUpdate = true;
-    };
+      const endDate = habit.endDate
+        ? new Date(habit.endDate).setHours(0, 0, 0, 0)
+        : false;
+      if (
+        updatedAt < today &&
+        startDate <= today &&
+        (!endDate || updatedAt <= endDate)
+      )
+        shouldUpdate = true;
+    }
   });
   return shouldUpdate;
 };

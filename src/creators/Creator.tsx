@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { Button } from '../components';
@@ -8,7 +9,13 @@ import {
   creatorReducer,
   initialCreatorState,
 } from './creatorReducer';
-import { TRootState, useAppDispatch, useAppSelector, IHabit } from '../store';
+import {
+  TRootState,
+  useAppDispatch,
+  useAppSelector,
+  IHabit,
+  closeCreatorModal,
+} from '../store';
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -48,6 +55,7 @@ export const Creator = ({
   documentCreationFn,
   helperFn,
 }: ICreatorProps) => {
+  const reduxDispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const user = useAppSelector((state: TRootState) => state.auth);
   const [state, dispatch] = useReducer(creatorReducer, initialCreatorState);
@@ -80,6 +88,7 @@ export const Creator = ({
     dispatch({
       type: CreatorActions.CLOSE,
     });
+    reduxDispatch(closeCreatorModal());
   };
 
   const addMetaData = () => {
@@ -111,11 +120,12 @@ export const Creator = ({
         if (user.data)
           appDispatch(helperFn({ userId: user.data.uid, habitId: result.id }));
       })
-      .then(() =>
+      .then(() => {
         dispatch({
           type: CreatorActions.CLOSE,
-        }),
-      );
+        });
+        reduxDispatch(closeCreatorModal());
+      });
   };
 
   const collection = stepsData({ state, changeValue });

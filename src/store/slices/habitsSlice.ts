@@ -78,7 +78,9 @@ export const updateHabits = createAsyncThunk(
           return { ...a };
         });
         const today = new Date().setHours(0, 0, 0, 0);
-        const endDate = habit.endDate ? new Date(habit.endDate).setHours(0, 0, 0, 0) : false;
+        const endDate = habit.endDate
+          ? new Date(habit.endDate).setHours(0, 0, 0, 0)
+          : false;
         let selectedDay = new Date(habit.startDate);
         let selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
         if (realization.length > 0) {
@@ -93,7 +95,10 @@ export const updateHabits = createAsyncThunk(
           selectedDay = addDays(new Date(lastRealization.date), 1);
           selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
         }
-        while (selectedDayHours <= today && (!endDate || selectedDayHours <= endDate)) {
+        while (
+          selectedDayHours <= today &&
+          (!endDate || selectedDayHours <= endDate)
+        ) {
           const date = getProperDateString(selectedDay);
           const dayStatus: THabitRealizationValue =
             selectedDayHours < today ? habit.defaultRealizationValue : 'EMPTY';
