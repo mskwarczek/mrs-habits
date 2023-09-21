@@ -1,9 +1,8 @@
 export type TStandardHabitFreq =
-  | 'HOURLY'
-  | 'DAILY'
-  | 'WEEKLY'
-  | 'MONTHLY'
-  | 'YEARLY';
+  // | 'HOURLY'
+  'DAILY' | 'WEEKLY';
+// | 'MONTHLY'
+// | 'YEARLY';
 
 export type THabitFreq = { category: 'STANDARD'; type: TStandardHabitFreq };
 //  | { category: 'TIMES', type: 'HOUR-TIMES' | 'DAY-TIMES' | 'WEEK-TIMES' | 'MONTH-TIMES' | 'YEAR-TIMES', value: number } // TODO

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button } from './index';
+import { Button, HabitRealizationGrid } from './index';
 import { IHabit } from '../store';
 import { getTimeSinceDate } from '../utils/datetime';
 
@@ -21,9 +21,8 @@ interface IHabitCardProps {
   habit: IHabit;
 }
 
-const HabitCard = ({
-  habit: { id, name, startDate, endDate, description },
-}: IHabitCardProps) => {
+const HabitCard = ({ habit }: IHabitCardProps) => {
+  const { id, name, startDate, endDate, description } = habit;
   const navigate = useNavigate();
 
   const handleNav = (endpoint: string) => {
@@ -43,6 +42,7 @@ const HabitCard = ({
       )}
       {endDate && <p>Planned end or update: {endDate}</p>}
       <p>{description}</p>
+      <HabitRealizationGrid habit={habit} />
       <Button
         text={'Show details'}
         action={() => handleNav(`/habits/${id}`)}
