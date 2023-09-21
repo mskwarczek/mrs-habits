@@ -32,8 +32,22 @@ const GlobalStyle = createGlobalStyle`
   h2 {
     color: ${({ theme }) => theme.color.text.primary};
     font-weight: ${({ theme }) => theme.fontWeight.bold};
+    font-size: ${({ theme }) => theme.fontSize.xl};
+    line-height: ${({ theme }) => theme.lineHeight.xl};
+  }
+
+  h3 {
+    color: ${({ theme }) => theme.color.text.primary};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
     font-size: ${({ theme }) => theme.fontSize.l};
     line-height: ${({ theme }) => theme.lineHeight.l};
+  }
+
+  p {
+    color: ${({ theme }) => theme.color.text.primary};
+    font-weight: ${({ theme }) => theme.fontWeight.normal};
+    font-size: ${({ theme }) => theme.fontSize.m};
+    line-height: ${({ theme }) => theme.lineHeight.m};
   }
 `;
 

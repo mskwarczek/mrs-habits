@@ -9,7 +9,6 @@ const StyledHeader = styled.header`
   align-items: center;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.color.bg.primary};
-  padding-left: ${({ theme }) => theme.space.xl};
   margin-bottom: ${({ theme }) => theme.space.l};
 `;
 

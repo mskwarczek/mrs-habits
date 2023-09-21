@@ -7,9 +7,10 @@ import { TRootState, openCreatorModal, closeCreatorModal } from '../store';
 
 interface ICreatorSection {
   type: 'HABIT';
+  children?: React.ReactNode;
 }
 
-const CreatorSection = ({ type }: ICreatorSection) => {
+const CreatorSection = ({ type, children }: ICreatorSection) => {
   const isModalOpen = useSelector(
     (state: TRootState) => state.modals.creatorModal.isOpen,
   );
@@ -19,10 +20,14 @@ const CreatorSection = ({ type }: ICreatorSection) => {
     case 'HABIT':
       return (
         <div>
-          <Button
-            text={'Create a new habit'}
-            action={() => dispatch(openCreatorModal())}
-          />
+          {!children ? (
+            <Button
+              text={'Create a new habit'}
+              action={() => dispatch(openCreatorModal())}
+            />
+          ) : (
+            children
+          )}
           {isModalOpen && (
             <Modal
               isOpen={isModalOpen}

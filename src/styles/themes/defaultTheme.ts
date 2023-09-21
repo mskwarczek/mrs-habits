@@ -2,18 +2,18 @@ import { DefaultTheme } from 'styled-components';
 
 const defaultTheme: DefaultTheme = {
   breakpoints: {
-    xs: '321px',
-    s: '481px',
+    xs: '479px',
+    s: '639px',
     m: '769px',
     l: '1025px',
-    xl: '1201px',
+    xl: '1281px',
   },
   space: {
-    xs: '8px',
-    s: '16px',
-    m: '24px',
-    l: '32px',
-    xl: '40px',
+    xs: '10px',
+    s: '12px',
+    m: '14px',
+    l: '18px',
+    xl: '22px',
   },
   color: {
     text: {
@@ -37,11 +37,11 @@ const defaultTheme: DefaultTheme = {
   },
   fontFamily: 'Roboto, sans-serif',
   fontSize: {
-    xs: '12px',
-    s: '14px',
-    m: '16px',
-    l: '24px',
-    xl: '32px',
+    xs: '8px',
+    s: '10px',
+    m: '12px',
+    l: '14px',
+    xl: '16px',
   },
   fontWeight: {
     normal: 400,
@@ -49,11 +49,11 @@ const defaultTheme: DefaultTheme = {
     action: 500,
   },
   lineHeight: {
-    xs: '16px',
-    s: '20px',
-    m: '24px',
-    l: '32px',
-    xl: '40px',
+    xs: '10px',
+    s: '12px',
+    m: '14px',
+    l: '18px',
+    xl: '22px',
   },
   borderRad: {
     xs: '4px',

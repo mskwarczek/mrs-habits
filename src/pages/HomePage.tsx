@@ -1,15 +1,11 @@
 import React from 'react';
 
-import { CreatorSection, HabitsOverview } from '../components';
+import { HabitsOverview } from '../components';
 
 const HomePage = () => {
   return (
     <main>
-      Home Page
-      <br />
       <HabitsOverview />
-      <br />
-      <CreatorSection type='HABIT' />
     </main>
   );
 };

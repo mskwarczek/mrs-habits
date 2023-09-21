@@ -3,12 +3,12 @@ import styled from 'styled-components';
 
 import { THabitRealization } from '../store';
 
-const StyledGridDay = styled.div<{ bgColor: string }>`
+const StyledGridDay = styled.div<{ bgcolor: string }>`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
-  background-color: ${({ bgColor }) => bgColor};
+  background-color: ${({ bgcolor }) => bgcolor};
   cursor: default;
   &:hover {
     border: 1px solid ${({ theme }) => theme.color.bg.active};
@@ -51,7 +51,7 @@ const GridDay = ({ day }: IGridDayProps) => {
 
   return (
     <StyledGridDay
-      bgColor={bgColor}
+      bgcolor={bgColor}
       title={date}
     >
       {isStartDate && '>'}

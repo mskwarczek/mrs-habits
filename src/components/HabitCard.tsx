@@ -7,14 +7,31 @@ import { IHabit } from '../store';
 import { getTimeSinceDate } from '../utils/datetime';
 
 const StyledCard = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  align-items: left;
-  width: 300px;
-  padding: ${({ theme }) => theme.space.m};
+  display: grid;
+  grid-template-areas:
+    'name'
+    'info'
+    'realization-grid'
+    'expand-button';
+  gap: ${({ theme }) => theme.space.xs};
+  padding: ${({ theme }) => theme.space.xs};
   border: 1px solid ${({ theme }) => theme.color.bg.secondary};
   border-radius: ${({ theme }) => theme.borderRad.m};
+  @media only screen and (min-width: ${({ theme }) => theme.breakpoints.xl}) {
+    padding: ${({ theme }) => theme.space.s};
+  }
+`;
+
+const StyledName = styled.h3`
+  grid-area: name;
+`;
+
+const StyledInfo = styled.div`
+  grid-area: info;
+`;
+
+const StyledButton = styled(Button)`
+  grid-area: expand-button;
 `;
 
 interface IHabitCardProps {
@@ -33,17 +50,19 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
 
   return (
     <StyledCard>
-      <p>{name}</p>
-      {startDate && (
-        <p>You have been following this habit since {startDate}.</p>
-      )}
-      {timePassed && timePassed.days >= 2 && (
-        <p>It is {timePassed.days} full days!</p>
-      )}
-      {endDate && <p>Planned end or update: {endDate}</p>}
-      <p>{description}</p>
+      <StyledName>{name}</StyledName>
+      <StyledInfo>
+        {startDate && (
+          <p>You have been following this habit since {startDate}.</p>
+        )}
+        {timePassed && timePassed.days >= 2 && (
+          <p>It is {timePassed.days} full days!</p>
+        )}
+        {endDate && <p>Planned end or update: {endDate}</p>}
+        <p>{description}</p>
+      </StyledInfo>
       <HabitRealizationGrid habit={habit} />
-      <Button
+      <StyledButton
         text={'Show details'}
         action={() => handleNav(`/habits/${id}`)}
       />

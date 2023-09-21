@@ -14,14 +14,15 @@ import { transposeMatrix } from '../utils/math';
 
 const StyledGrid = styled.div<{
   orientation: 'VERTICAL' | 'HORIZONTAL';
-  weeksNumber: number;
+  weeksnumber: number;
 }>`
+  grid-area: realization-grid;
   display: grid;
   ${({ orientation }) =>
     orientation === 'VERTICAL'
       ? 'grid-template-rows'
-      : 'grid-template-columns'}: repeat(${({ weeksNumber }) =>
-    weeksNumber}, 15px);
+      : 'grid-template-columns'}: repeat(${({ weeksnumber }) =>
+    weeksnumber}, 15px);
   ${({ orientation }) =>
     orientation === 'VERTICAL'
       ? 'grid-template-columns'
@@ -93,39 +94,28 @@ const HabitRealizationGrid = ({
   }
 
   return (
-    <>
-      <button
-        onClick={() =>
-          setOrientation((prevState) =>
-            prevState === 'VERTICAL' ? 'HORIZONTAL' : 'VERTICAL',
+    <StyledGrid
+      orientation={orientation}
+      weeksnumber={weekNumber}
+    >
+      {orientation === 'VERTICAL'
+        ? grid.map((week) =>
+            week.map((day) => (
+              <GridDay
+                key={day.date}
+                day={day}
+              />
+            )),
           )
-        }
-      >
-        {orientation}
-      </button>
-      <StyledGrid
-        orientation={orientation}
-        weeksNumber={weekNumber}
-      >
-        {orientation === 'VERTICAL'
-          ? grid.map((week) =>
-              week.map((day) => (
-                <GridDay
-                  key={day.date}
-                  day={day}
-                />
-              )),
-            )
-          : transposeMatrix(grid).map((week) =>
-              week.map((day) => (
-                <GridDay
-                  key={day.date}
-                  day={day}
-                />
-              )),
-            )}
-      </StyledGrid>
-    </>
+        : transposeMatrix(grid).map((week) =>
+            week.map((day) => (
+              <GridDay
+                key={day.date}
+                day={day}
+              />
+            )),
+          )}
+    </StyledGrid>
   );
 };
 

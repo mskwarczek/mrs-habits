@@ -6,8 +6,8 @@ import { Input, Select, Textarea } from './index';
 const StyledWrapper = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding-bottom: ${({ theme }) => theme.space.xs};
 `;
 
