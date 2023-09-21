@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { flexWrappers } from '../styles/mixins';
+
 const StyledButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${flexWrappers.rCenter};
   cursor: pointer;
   outline: inherit;
   border: none;

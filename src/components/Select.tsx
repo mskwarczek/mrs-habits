@@ -2,9 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledSelect = styled.select`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-width: 300px;
   outline: inherit;
   border: none;

@@ -3,13 +3,11 @@ import styled from 'styled-components';
 
 import { FormField } from '../../components';
 import { Creator, ICreatorSteps } from '../Creator';
+import { flexWrappers } from '../../styles/mixins';
 import { createHabit, addUserHabit, IHabitTemplate } from '../../store';
 
 const StyledFieldsGroup = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
+  ${flexWrappers.rLine};
 `;
 
 export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {

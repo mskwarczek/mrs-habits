@@ -2,12 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { THabitRealization } from '../store';
+import { flexWrappers } from '../styles/mixins';
 
 const StyledGridDay = styled.div<{ bgcolor: string }>`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: center;
+  ${flexWrappers.rCenter};
   background-color: ${({ bgcolor }) => bgcolor};
   cursor: default;
   &:hover {

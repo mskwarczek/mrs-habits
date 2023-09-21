@@ -2,12 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Input, Select, Textarea } from './index';
+import { flexWrappers } from '../styles/mixins';
 
 const StyledWrapper = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: space-between;
+  ${flexWrappers.rLine};
   padding-bottom: ${({ theme }) => theme.space.xs};
 `;
 

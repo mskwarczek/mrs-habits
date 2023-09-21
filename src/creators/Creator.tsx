@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { Button } from '../components';
+import { flexWrappers } from '../styles/mixins';
 import {
   ICreatorState,
   CreatorActions,
@@ -18,19 +19,13 @@ import {
 } from '../store';
 
 const StyledWrapper = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
+  ${flexWrappers.cCenter};
   width: 600px;
   gap: ${({ theme }) => theme.space.m};
 `;
 
 const StyledBttonsGroup = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  align-items: center;
+  ${flexWrappers.rLine};
   width: 100%;
 `;
 

@@ -2,12 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { UserPanel } from './index';
+import { flexWrappers } from '../styles/mixins';
 
 const StyledHeader = styled.header`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: space-between;
+  ${flexWrappers.rLine};
   background-color: ${({ theme }) => theme.color.bg.primary};
   margin-bottom: ${({ theme }) => theme.space.l};
 `;

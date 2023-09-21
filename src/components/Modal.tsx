@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Portal, Button } from './index';
 import { hextToRgbaString } from '../utils/colors';
+import { flexWrappers } from '../styles/mixins';
 
 const StyledModalBackdrop = styled.div`
   position: absolute;
@@ -10,25 +11,18 @@ const StyledModalBackdrop = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${flexWrappers.cCenter};
   background-color: ${({ theme }) =>
     hextToRgbaString(theme.color.bg.secondary, 0.8)};
 `;
 
 const StyledModal = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
   background-color: ${({ theme }) => theme.color.bg.primary};
   border-radius: ${({ theme }) => theme.borderRad.xl};
 `;
 
 const StyledModalTop = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: space-between;
+  ${flexWrappers.rLine};
   padding: ${({ theme }) => theme.space.m};
 `;
 

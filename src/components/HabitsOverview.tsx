@@ -3,12 +3,10 @@ import styled from 'styled-components';
 
 import { CreatorSection, HabitCard } from './index';
 import { TRootState, useAppSelector } from '../store';
+import { flexWrappers } from '../styles/mixins';
 
 const StyledSectionHeader = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items-center;
-  justify-content: space-between;
+  ${flexWrappers.rLine};
   padding-bottom: ${({ theme }) => theme.space.s};
 `;
 

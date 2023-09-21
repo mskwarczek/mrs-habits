@@ -2,9 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledTextarea = styled.textarea`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-width: 300px;
   outline: inherit;
   border: none;
