@@ -2,6 +2,7 @@ export type { IGridDay } from './GridDay';
 
 export { default as Button } from './Button';
 export { default as CreatorSection } from './CreatorSection';
+export { default as Footer } from './Footer';
 export { default as FormField } from './FormField';
 export { default as GridDay } from './GridDay';
 export { default as GoalCard } from './GoalCard';
