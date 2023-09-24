@@ -56,11 +56,11 @@ const defaultTheme: DefaultTheme = {
     xl: '22px',
   },
   borderRad: {
-    xs: '4px',
-    s: '8px',
-    m: '16px',
-    l: '16px',
-    xl: '16px',
+    xs: '2px',
+    s: '4px',
+    m: '6px',
+    l: '8px',
+    xl: '12px',
   },
 };
 

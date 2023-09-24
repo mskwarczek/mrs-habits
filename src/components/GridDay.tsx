@@ -5,11 +5,12 @@ import { FaPlay, FaFlagCheckered, FaLocationPin } from 'react-icons/fa6';
 import { THabitRealization } from '../store';
 import { flexWrappers } from '../styles/mixins';
 
-const StyledGridDay = styled.div<{ bgcolor: string }>`
+const StyledGridDay = styled.div<{ $bgColor: string }>`
   ${flexWrappers.rCenter};
-  background-color: ${({ bgcolor }) => bgcolor};
+  background-color: ${({ $bgColor }) => $bgColor};
   cursor: default;
   color: ${({ theme }) => theme.color.text.primary};
+  border-radius: ${({ theme }) => theme.borderRad.xs};
   &:hover {
     border: 1px solid ${({ theme }) => theme.color.bg.active};
   }
@@ -51,7 +52,7 @@ const GridDay = ({ day }: IGridDayProps) => {
 
   return (
     <StyledGridDay
-      bgcolor={bgColor}
+      $bgColor={bgColor}
       title={date}
     >
       {isStartDate && <FaPlay />}

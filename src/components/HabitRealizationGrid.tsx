@@ -14,15 +14,15 @@ import { transposeMatrix } from '../utils/math';
 
 const StyledGrid = styled.div<{
   orientation: 'VERTICAL' | 'HORIZONTAL';
-  weeksnumber: number;
+  $weeksNumber: number;
 }>`
   grid-area: realization-grid;
   display: grid;
   ${({ orientation }) =>
     orientation === 'VERTICAL'
       ? 'grid-template-rows'
-      : 'grid-template-columns'}: repeat(${({ weeksnumber }) =>
-    weeksnumber}, 15px);
+      : 'grid-template-columns'}: repeat(${({ $weeksNumber }) =>
+    $weeksNumber}, 15px);
   ${({ orientation }) =>
     orientation === 'VERTICAL'
       ? 'grid-template-columns'
@@ -96,7 +96,7 @@ const HabitRealizationGrid = ({
   return (
     <StyledGrid
       orientation={orientation}
-      weeksnumber={weekNumber}
+      $weeksNumber={weekNumber}
     >
       {orientation === 'VERTICAL'
         ? grid.map((week) =>

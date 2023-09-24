@@ -5,7 +5,7 @@ const StyledTextarea = styled.textarea`
   min-width: 300px;
   outline: inherit;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRad.s};
+  border-radius: ${({ theme }) => theme.borderRad.m};
   padding: ${({ theme }) => theme.space.xs} ${({ theme }) => theme.space.m};
   background-color: ${({ theme }) => theme.color.bg.action};
   color: ${({ theme }) => theme.color.text.action};

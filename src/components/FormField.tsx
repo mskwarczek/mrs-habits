@@ -9,14 +9,14 @@ const StyledWrapper = styled.div`
   padding-bottom: ${({ theme }) => theme.space.xs};
 `;
 
-const StyledValidity = styled.p<{ isvalid?: string }>`
+const StyledValidity = styled.p<{ $isValid?: string }>`
   width: 20px;
   padding-left: ${({ theme }) => theme.space.xs};
-  color: ${({ theme, isvalid }) =>
-    isvalid ? theme.color.text.success : theme.color.text.error};
+  color: ${({ theme, $isValid }) =>
+    $isValid ? theme.color.text.success : theme.color.text.error};
 `;
 
-const DescriptionText = styled.p<{ isvalid?: string }>`
+const DescriptionText = styled.p<{ $isValid?: string }>`
   font-size: ${({ theme }) => theme.fontSize.s};
 `;
 
@@ -96,7 +96,7 @@ const FormField = ({
               onChange={onChange}
             />
           )}
-          <StyledValidity isvalid={isValid ? 'true' : undefined}>
+          <StyledValidity $isValid={isValid ? 'true' : undefined}>
             {isValid ? 'OK' : '*'}
           </StyledValidity>
         </StyledWrapper>
