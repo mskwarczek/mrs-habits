@@ -30,12 +30,14 @@ interface IButtonProps {
   text: string;
   disabled?: boolean;
   title?: string;
+  className?: string;
   action?: (...args: any[]) => void;
 }
 
-const Button = ({ text, disabled, title, action }: IButtonProps) => {
+const Button = ({ text, disabled, title, className, action }: IButtonProps) => {
   return (
     <StyledButton
+      className={className}
       onClick={action && !disabled ? () => action() : () => null}
       disabled={disabled}
       title={title}

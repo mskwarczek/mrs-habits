@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import styled from 'styled-components';
 import { FaPlay, FaFlagCheckered, FaLocationPin } from 'react-icons/fa6';
 
 import { THabitRealization } from '../store';
 import { flexWrappers } from '../styles/mixins';
 
-const StyledGridDay = styled.div<{ $bgColor: string }>`
+const StyledGridDay = styled.div<{
+  $bgColor: string;
+  $isSelected: boolean;
+  $isOutOfScope: boolean;
+}>`
   ${flexWrappers.rCenter};
   background-color: ${({ $bgColor }) => $bgColor};
   cursor: default;
   color: ${({ theme }) => theme.color.text.primary};
+  border: 2px solid
+    ${({ theme, $isSelected }) =>
+      $isSelected ? theme.color.text.primary : 'transparent'};
   border-radius: ${({ theme }) => theme.borderRad.xs};
   &:hover {
-    border: 1px solid ${({ theme }) => theme.color.bg.active};
+    border: 2px solid
+      ${({ theme, $isOutOfScope }) =>
+        $isOutOfScope ? 'transparent' : theme.color.text.primary};
   }
 `;
 
@@ -29,9 +38,11 @@ export interface IGridDay extends Partial<THabitRealization> {
 
 interface IGridDayProps {
   day: IGridDay;
+  isSelected: boolean;
+  setSelectedDate: Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-const GridDay = ({ day }: IGridDayProps) => {
+const GridDay = ({ day, isSelected, setSelectedDate }: IGridDayProps) => {
   const {
     date,
     dayStatus,
@@ -43,6 +54,11 @@ const GridDay = ({ day }: IGridDayProps) => {
     isOutOfScope,
   } = day;
 
+  const handleSelect = () => {
+    if (isOutOfScope) return;
+    isSelected ? setSelectedDate(undefined) : setSelectedDate(date);
+  };
+
   let bgColor = 'gray';
   if (isOutOfScope) bgColor = 'transparent';
   if (dayStatus === 'DONE') bgColor = 'green';
@@ -53,7 +69,10 @@ const GridDay = ({ day }: IGridDayProps) => {
   return (
     <StyledGridDay
       $bgColor={bgColor}
+      $isSelected={isSelected}
+      $isOutOfScope={isOutOfScope}
       title={date}
+      onClick={handleSelect}
     >
       {isStartDate && <FaPlay />}
       {isEndDate && <FaFlagCheckered />}

@@ -19,6 +19,7 @@ interface IImageProps {
   alt: string;
   title?: string;
   lazyLoading?: boolean;
+  className?: string;
 }
 
 const Image = ({
@@ -28,6 +29,7 @@ const Image = ({
   alt,
   title,
   lazyLoading,
+  className,
 }: IImageProps) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -42,6 +44,7 @@ const Image = ({
         alt={alt}
         title={title}
         loading={lazyLoading ? 'lazy' : 'eager'}
+        className={className}
       />
     );
   } catch (error) {
@@ -50,6 +53,7 @@ const Image = ({
       <StyledImage404
         $width={width}
         $height={height}
+        className={className}
       >
         <p>{alt}</p>
       </StyledImage404>
