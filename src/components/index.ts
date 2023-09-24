@@ -11,6 +11,7 @@ export { default as HabitCard } from './HabitCard';
 export { default as HabitsOverview } from './HabitsOverview';
 export { default as HabitRealizationGrid } from './HabitRealizationGrid';
 export { default as Header } from './Header';
+export { default as Image } from './Image';
 export { default as Input } from './Input';
 export { default as Modal } from './Modal';
 export { default as Portal } from './Portal';

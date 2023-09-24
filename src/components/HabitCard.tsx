@@ -2,17 +2,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button, HabitRealizationGrid } from './index';
+import { Button, Image, HabitRealizationGrid } from './index';
 import { IHabit } from '../store';
 import { getTimeSinceDate } from '../utils/datetime';
 
 const StyledCard = styled.div`
   display: grid;
   grid-template-areas:
-    'name'
-    'info'
-    'realization-grid'
-    'expand-button';
+    'icon name'
+    'info info'
+    'realization-grid realization-grid'
+    '. expand-button';
   gap: ${({ theme }) => theme.space.xs};
   padding: ${({ theme }) => theme.space.xs};
   border: 1px solid ${({ theme }) => theme.color.bg.secondary};
@@ -20,6 +20,10 @@ const StyledCard = styled.div`
   @media only screen and (min-width: ${({ theme }) => theme.breakpoints.xl}) {
     padding: ${({ theme }) => theme.space.s};
   }
+`;
+
+const StyledIconContainer = styled.div`
+  grid-area: icon;
 `;
 
 const StyledName = styled.h3`
@@ -50,6 +54,14 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
 
   return (
     <StyledCard>
+      <StyledIconContainer>
+        <Image
+          path='icons/icon_001.png'
+          width={'50px'}
+          height={'50px'}
+          alt={'Habit icon'}
+        />
+      </StyledIconContainer>
       <StyledName>{name}</StyledName>
       <StyledInfo>
         {startDate && (
