@@ -2,7 +2,27 @@ import {
   THabitFreq,
   THabitRealization,
   THabitPeriodStatus,
+  THabitDayStatus,
 } from '../types/habit';
+
+export const getReadableStatus = (
+  status: THabitDayStatus | THabitPeriodStatus,
+) => {
+  switch (status) {
+    case 'DONE':
+      return 'done';
+    case 'NOT-DONE':
+      return 'planned, not done';
+    case 'PART-DONE':
+      return 'partly done';
+    case 'WAITING':
+      return 'in progress';
+    case 'EMPTY':
+      return 'not done';
+    default:
+      return 'not done';
+  }
+};
 
 export const getPeriodLength = ({ type }: THabitFreq) => {
   switch (type) {

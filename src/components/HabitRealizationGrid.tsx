@@ -8,7 +8,7 @@ const StyledGrid = styled.div<{
   orientation: 'VERTICAL' | 'HORIZONTAL';
   $weeksNumber: number;
 }>`
-  grid-area: realization-grid;
+  flex-grow: 1;
   display: grid;
   ${({ orientation }) =>
     orientation === 'VERTICAL'
@@ -21,8 +21,6 @@ const StyledGrid = styled.div<{
       : 'grid-template-rows'}: repeat(7, 15px);
   gap: 1px;
   background-color: ${({ theme }) => theme.color.bg.secondary};
-  margin-top: ${({ theme }) => theme.space.s};
-  margin-bottom: ${({ theme }) => theme.space.s};
   font-size: 10px;
 `;
 
