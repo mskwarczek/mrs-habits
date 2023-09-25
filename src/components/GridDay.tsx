@@ -62,9 +62,10 @@ const GridDay = ({ day, isSelected, setSelectedDate }: IGridDayProps) => {
   let bgColor = 'gray';
   if (isOutOfScope) bgColor = 'transparent';
   if (dayStatus === 'DONE') bgColor = 'green';
-  if (dayStatus === 'NOT-DONE') bgColor = 'orange';
+  if (dayStatus === 'NOT-DONE') bgColor = 'red';
   if (dayStatus === 'EMPTY' && periodStatus === 'DONE') bgColor = 'lightgreen';
-  if (dayStatus === 'EMPTY' && periodStatus === 'NOT-DONE') bgColor = 'yellow';
+  if (dayStatus === 'EMPTY' && periodStatus === 'WAITING') bgColor = 'yellow';
+  if (dayStatus === 'EMPTY' && periodStatus === 'NOT-DONE') bgColor = 'orange';
 
   return (
     <StyledGridDay

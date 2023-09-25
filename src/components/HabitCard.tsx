@@ -20,17 +20,22 @@ import { flexWrappers } from '../styles/mixins';
 
 const StyledCard = styled.div<{ $selectedDate?: string }>`
   display: grid;
+  grid-template-columns: 50px 1fr 1fr;
+  grid-template-rows: ${({ $selectedDate }) =>
+    $selectedDate ? 'repeat(5, auto) 34px' : 'repeat(4, auto) 34px'};
   grid-template-areas: ${({ $selectedDate }) =>
     $selectedDate
-      ? `'icon name'
-    'info info'
-    'selected-date selected-date'
-    'realization-grid realization-grid'
-    '. expand-button'`
-      : `'icon name'
-    'info info'
-    'realization-grid realization-grid'
-    '. expand-button'`};
+      ? `'icon name name'
+    'icon info info'
+    'description description description'
+    'selected-date selected-date selected-date'
+    'realization-grid realization-grid realization-grid'
+    '. . expand-button'`
+      : `'icon name name'
+    'icon info info'
+    'description description description'
+    'realization-grid realization-grid realization-grid'
+    '. . expand-button'`};
   gap: ${({ theme }) => theme.space.xs};
   padding: ${({ theme }) => theme.space.xs};
   border: 1px solid ${({ theme }) => theme.color.bg.secondary};
@@ -50,6 +55,10 @@ const StyledName = styled.h3`
 
 const StyledInfo = styled.div`
   grid-area: info;
+`;
+
+const StyledDescription = styled.div`
+  grid-area: description;
 `;
 
 const StyledSelectedDate = styled.div`
@@ -105,7 +114,8 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
     navigate(endpoint);
   };
 
-  const timePassed = startDate && getTimeSinceDate(startDate);
+  const timeSinceStart = startDate && getTimeSinceDate(startDate);
+  const timeSinceEnd = endDate && getTimeSinceDate(endDate);
 
   const { grid, detaildedData, weekNumber, properStart, properEnd } =
     useMemo(() => {
@@ -190,15 +200,22 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
       </StyledImageWrapper>
       <StyledName>{name}</StyledName>
       <StyledInfo>
-        {startDate && (
-          <p>You have been following this habit since {startDate}.</p>
+        {timeSinceStart && timeSinceStart.days >= 0 ? (
+          <p>
+            Performed since {startDate} {'('}
+            {timeSinceStart.days} days{')'}.
+          </p>
+        ) : (
+          <p>Starts on {startDate}.</p>
         )}
-        {timePassed && timePassed.days >= 2 && (
-          <p>It is {timePassed.days} full days!</p>
+        {timeSinceEnd && timeSinceEnd.days <= 0 && (
+          <p>Finishes on {endDate}.</p>
         )}
-        {endDate && <p>Planned end or update: {endDate}</p>}
-        <p>{description}</p>
+        {timeSinceEnd && timeSinceEnd.days > 0 && <p>Finished on {endDate}.</p>}
       </StyledInfo>
+      <StyledDescription>
+        {description && <p>Description: {description}</p>}
+      </StyledDescription>
       {selectedDate && (
         <StyledSelectedDate>
           <p>Selected date: {selectedDate}</p>
