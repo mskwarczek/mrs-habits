@@ -112,7 +112,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
         <FormField
           key={'creator-field-default-realization-value'}
           id={'creator-field-default-realization-value'}
-          name={'defaultRealizationValue'}
+          name={'defaultDayStatus'}
           type={'select'}
           options={[
             { value: '', text: 'Select option' },
@@ -140,13 +140,13 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           description={
             'Your habit can be marked as "done", "empty" or "not done" for each day it is applied. Evey new day is maked as "empty". If you do not change state of a "daily" habit to "done" or "not done" by the end of the day, it will update to this value automatically. Other types of habits will always keep "empty" status unless changed by the user.'
           }
-          value={state.result?.defaultRealizationValue}
+          value={state.result?.defaultDayStatus}
           onChange={(e: React.FormEvent<HTMLSelectElement>) => changeValue(e)}
         />
       ),
       isValid: (result: IHabitTemplate) =>
-        typeof result.defaultRealizationValue === 'string' &&
-        result.defaultRealizationValue.length > 0,
+        typeof result.defaultDayStatus === 'string' &&
+        result.defaultDayStatus.length > 0,
     },
     {
       component: (

@@ -1,4 +1,8 @@
-import { THabitFreq, THabitRealization } from '../types/habit';
+import {
+  THabitFreq,
+  THabitRealization,
+  THabitPeriodStatus,
+} from '../types/habit';
 
 export const getPeriodLength = ({ type }: THabitFreq) => {
   switch (type) {
@@ -37,14 +41,17 @@ export const extendRealizationData = (
       ...day,
       periodStart: day.date,
       periodEnd: day.date,
-      periodStatus: day.dayStatus === 'EMPTY' ? 'WAITING' : day.dayStatus,
+      periodStatus:
+        day.dayStatus === ('EMPTY' as THabitPeriodStatus)
+          ? 'WAITING'
+          : (day.dayStatus as THabitPeriodStatus),
     }));
     return result;
   }
   const periodRequirements = getPeriodRequirements(frequency);
   let periodCount = 0;
   let dayCount = 0;
-  let periodStatus = 'WAITING';
+  let periodStatus: THabitPeriodStatus = 'WAITING';
   let realizationsCount = 0;
   let periodDay = 0;
   while (dayCount < realization.length) {

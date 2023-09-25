@@ -11,12 +11,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 
-import {
-  IHabit,
-  THabitRealization,
-  THabitRealizationValue,
-  db,
-} from '../index';
+import { IHabit, THabitRealization, THabitDayStatus, db } from '../index';
 import { getProperDateString, addDays } from '../../utils/datetime';
 
 export interface IHabitsState {
@@ -91,7 +86,7 @@ export const updateHabits = createAsyncThunk(
             lastRealization.dayStatus === 'EMPTY'
           )
             realization[realization.length - 1].dayStatus =
-              habit.defaultRealizationValue;
+              habit.defaultDayStatus;
           selectedDay = addDays(new Date(lastRealization.date), 1);
           selectedDayHours = selectedDay.setHours(0, 0, 0, 0);
         }
@@ -100,8 +95,8 @@ export const updateHabits = createAsyncThunk(
           (!endDate || selectedDayHours <= endDate)
         ) {
           const date = getProperDateString(selectedDay);
-          const dayStatus: THabitRealizationValue =
-            selectedDayHours < today ? habit.defaultRealizationValue : 'EMPTY';
+          const dayStatus: THabitDayStatus =
+            selectedDayHours < today ? habit.defaultDayStatus : 'EMPTY';
           realization.push({
             date,
             dayStatus,

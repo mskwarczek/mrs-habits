@@ -1,8 +1,4 @@
-import {
-  IHabitTemplate,
-  THabitRealizationValue,
-  TStandardHabitFreq,
-} from '../store';
+import { IHabitTemplate, THabitDayStatus, TStandardHabitFreq } from '../store';
 import {
   getProperDateString,
   getTimeSinceDate,
@@ -122,7 +118,7 @@ export const creatorReducer = (
       };
     case CreatorActions.ADD_REALIZATION_DATA: {
       if (!state.result?.startDate) return state; // TODO: error and / or step change
-      if (!state.result?.defaultRealizationValue) return state; // TODO: error and / or step change
+      if (!state.result?.defaultDayStatus) return state; // TODO: error and / or step change
       const days = getTimeSinceDate(state.result.startDate).days;
       const realizationArray = [];
       if (days >= 0) {
@@ -137,10 +133,8 @@ export const creatorReducer = (
           (!endDate || selectedDayHours <= endDate)
         ) {
           const date = getProperDateString(selectedDay);
-          const dayStatus: THabitRealizationValue =
-            selectedDayHours < today
-              ? state.result?.defaultRealizationValue
-              : 'EMPTY';
+          const dayStatus: THabitDayStatus =
+            selectedDayHours < today ? state.result?.defaultDayStatus : 'EMPTY';
           realizationArray.push({
             date,
             dayStatus,

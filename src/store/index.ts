@@ -10,7 +10,8 @@ export type {
   IHabit,
   IHabitTemplate,
   THabitRealization,
-  THabitRealizationValue,
+  THabitDayStatus,
+  THabitPeriodStatus,
   TStandardHabitFreq,
   THabitFreq,
 } from './types/habit';

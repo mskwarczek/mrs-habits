@@ -12,11 +12,12 @@ export type THabitFreq = { category: 'STANDARD'; type: TStandardHabitFreq };
 
 // type TReminder = 'APP' | 'NOTIFICATION' | 'EMAIL'; // TODO
 
-export type THabitRealizationValue = 'DONE' | 'EMPTY' | 'NOT-DONE';
+export type THabitDayStatus = 'DONE' | 'EMPTY' | 'NOT-DONE';
+export type THabitPeriodStatus = 'DONE' | 'PART-DONE' | 'WAITING' | 'NOT-DONE';
 
 export type THabitRealization = {
   date: string;
-  dayStatus: THabitRealizationValue;
+  dayStatus: THabitDayStatus;
   note?: string;
 };
 
@@ -30,7 +31,7 @@ export interface IHabitTemplate {
   name?: string;
   owner?: string;
   frequency?: THabitFreq;
-  defaultRealizationValue?: THabitRealizationValue;
+  defaultDayStatus?: THabitDayStatus;
   realization?: THabitRealization[];
   startDate?: string;
   endDate?: string;
@@ -50,7 +51,7 @@ export interface IHabit extends IHabitTemplate {
   name: string;
   owner: string;
   frequency: THabitFreq;
-  defaultRealizationValue: THabitRealizationValue;
+  defaultDayStatus: THabitDayStatus;
   realization: THabitRealization[];
   startDate: string;
   endDate?: string;

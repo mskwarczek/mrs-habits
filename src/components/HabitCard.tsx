@@ -35,7 +35,7 @@ const StyledCard = styled.div<{ $selectedDate?: string }>`
   }
 `;
 
-const StyledImage = styled(Image)`
+const StyledImageWrapper = styled.div`
   grid-area: icon;
 `;
 
@@ -51,7 +51,7 @@ const StyledSelectedDate = styled.div`
   grid-area: selected-date;
 `;
 
-const StyledButtonX = styled(Button)`
+const StyledButton = styled(Button)`
   grid-area: expand-button;
 `;
 
@@ -141,12 +141,14 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
 
   return (
     <StyledCard $selectedDate={selectedDate}>
-      <StyledImage
-        path='icons/icon_001.png'
-        width={'50px'}
-        height={'50px'}
-        alt={'Habit icon'}
-      />
+      <StyledImageWrapper>
+        <Image
+          path={'icons/icon_001.png'}
+          width={'50px'}
+          height={'50px'}
+          alt={'Habit icon'}
+        />
+      </StyledImageWrapper>
       <StyledName>{name}</StyledName>
       <StyledInfo>
         {startDate && (
@@ -181,7 +183,7 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
-      <StyledButtonX
+      <StyledButton
         text={'Show details'}
         action={() => handleNav(`/habits/${id}`)}
       />

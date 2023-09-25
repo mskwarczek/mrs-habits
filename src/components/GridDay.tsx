@@ -2,7 +2,7 @@ import React, { Dispatch } from 'react';
 import styled from 'styled-components';
 import { FaPlay, FaFlagCheckered, FaLocationPin } from 'react-icons/fa6';
 
-import { THabitRealization } from '../store';
+import { THabitRealization, THabitPeriodStatus } from '../store';
 import { flexWrappers } from '../styles/mixins';
 
 const StyledGridDay = styled.div<{
@@ -29,7 +29,7 @@ export interface IGridDay extends Partial<THabitRealization> {
   date: string;
   periodStart?: string;
   periodEnd?: string;
-  periodStatus?: string;
+  periodStatus?: THabitPeriodStatus;
   isToday: boolean;
   isStartDate: boolean;
   isEndDate: boolean;
