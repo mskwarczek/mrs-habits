@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { flexWrappers } from '../styles/mixins';
+
 const StyledButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${flexWrappers.rCenter};
   cursor: pointer;
   outline: inherit;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRad.s};
+  border-radius: ${({ theme }) => theme.borderRad.m};
   padding: ${({ theme }) => theme.space.xs} ${({ theme }) => theme.space.m};
   background-color: ${({ theme }) => theme.color.bg.action};
   color: ${({ theme }) => theme.color.text.action};
@@ -30,12 +30,14 @@ interface IButtonProps {
   text: string;
   disabled?: boolean;
   title?: string;
+  className?: string;
   action?: (...args: any[]) => void;
 }
 
-const Button = ({ text, disabled, title, action }: IButtonProps) => {
+const Button = ({ text, disabled, title, className, action }: IButtonProps) => {
   return (
     <StyledButton
+      className={className}
       onClick={action && !disabled ? () => action() : () => null}
       disabled={disabled}
       title={title}

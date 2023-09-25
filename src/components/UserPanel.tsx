@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { redirect, useNavigate } from 'react-router-dom';
 
 import { Button } from './index';
+import { flexWrappers } from '../styles/mixins';
 import {
   TRootState,
   useAppDispatch,
@@ -12,10 +13,7 @@ import {
 } from '../store';
 
 const StyledWrapper = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: flex-end;
+  ${flexWrappers.rLine};
   gap: ${({ theme }) => theme.space.m};
   background-color: ${({ theme }) => theme.color.bg.primary};
 `;
