@@ -43,6 +43,13 @@ const GlobalStyle = createGlobalStyle`
     line-height: ${({ theme }) => theme.lineHeight.l};
   }
 
+  h4 {
+    color: ${({ theme }) => theme.color.text.primary};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
+    font-size: ${({ theme }) => theme.fontSize.m};
+    line-height: ${({ theme }) => theme.lineHeight.m};
+  }
+
   p {
     color: ${({ theme }) => theme.color.text.primary};
     font-weight: ${({ theme }) => theme.fontWeight.normal};

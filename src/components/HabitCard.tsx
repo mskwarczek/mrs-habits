@@ -3,7 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaArrowDownLong, FaArrowRightLong } from 'react-icons/fa6';
 
-import { IGridDay, Button, Image, HabitRealizationGrid } from './index';
+import {
+  IGridDay,
+  Button,
+  ButtonGroup,
+  Image,
+  HabitRealizationGrid,
+} from './index';
 import { IHabit } from '../store';
 import {
   extendRealizationData,
@@ -22,13 +28,14 @@ const StyledCard = styled.div<{ $selectedDate?: string }>`
   display: grid;
   grid-template-columns: 50px 1fr 1fr;
   grid-template-rows: ${({ $selectedDate }) =>
-    $selectedDate ? 'repeat(5, auto) 34px' : 'repeat(4, auto) 34px'};
+    $selectedDate ? 'repeat(6, auto) 34px' : 'repeat(4, auto) 34px'};
   grid-template-areas: ${({ $selectedDate }) =>
     $selectedDate
       ? `'icon name name'
     'icon info info'
     'description description description'
     'selected-date selected-date selected-date'
+    'day-status-change day-status-change day-status-change'
     'realization-grid realization-grid realization-grid'
     '. . expand-button'`
       : `'icon name name'
@@ -63,6 +70,11 @@ const StyledDescription = styled.div`
 
 const StyledSelectedDate = styled.div`
   grid-area: selected-date;
+`;
+
+const StyledButtonsContainer = styled.div`
+  grid-area: day-status-change;
+  ${flexWrappers.cCenter};
 `;
 
 const StyledGridWrapper = styled.div`
@@ -218,7 +230,7 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
       </StyledDescription>
       {selectedDate && (
         <StyledSelectedDate>
-          <p>Selected date: {selectedDate}</p>
+          <h4>Selected date: {selectedDate}</h4>
           {selectedDayData.dayStatus && (
             <p>Day status: {getReadableStatus(selectedDayData.dayStatus)}</p>
           )}
@@ -234,6 +246,33 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
             </p>
           )}
         </StyledSelectedDate>
+      )}
+      {selectedDate && selectedDayData && selectedDayData.dayStatus && (
+        <StyledButtonsContainer>
+          <ButtonGroup
+            value={selectedDayData.dayStatus}
+            title={'Change day status'}
+            onChange={(option) => console.log('change!', option)}
+            options={[
+              {
+                value: 'NOT-DONE',
+                content: getReadableStatus('NOT-DONE'),
+                color: 'red',
+              },
+              {
+                value: 'EMPTY',
+                content: getReadableStatus('EMPTY'),
+                color: 'gray',
+                hidden: frequency.type === 'DAILY' && !selectedDayData.isToday,
+              },
+              {
+                value: 'DONE',
+                content: getReadableStatus('DONE'),
+                color: 'green',
+              },
+            ]}
+          />
+        </StyledButtonsContainer>
       )}
       <StyledGridWrapper>
         <StyledWeeksAxis>

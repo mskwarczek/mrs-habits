@@ -1,6 +1,7 @@
 export type { IGridDay } from './GridDay';
 
 export { default as Button } from './Button';
+export { default as ButtonGroup } from './ButtonGroup';
 export { default as CreatorSection } from './CreatorSection';
 export { default as Footer } from './Footer';
 export { default as FormField } from './FormField';
