@@ -4,6 +4,7 @@ import {
   THabitPeriodStatus,
   THabitDayStatus,
 } from '../types/habit';
+import { hextToRgbaString } from '../../utils/colors';
 
 export const getReadableStatus = (
   status: THabitDayStatus | THabitPeriodStatus,
@@ -22,6 +23,21 @@ export const getReadableStatus = (
     default:
       return 'not done';
   }
+};
+
+export const getStatusColor = (
+  dayStatus?: THabitDayStatus,
+  periodStatus?: THabitPeriodStatus,
+) => {
+  if (dayStatus === 'DONE') return '#008000';
+  if (dayStatus === 'NOT-DONE') return '#8B0000';
+  if (dayStatus === 'EMPTY') {
+    if (periodStatus === 'DONE') return hextToRgbaString('#008000', 0.5);
+    if (periodStatus === 'PART-DONE') return hextToRgbaString('#008000', 0.1);
+    if (periodStatus === 'WAITING') return hextToRgbaString('#FFFF00', 0.5);
+    if (periodStatus === 'NOT-DONE') return hextToRgbaString('#8B0000', 0.5);
+  }
+  return '#808080';
 };
 
 export const getPeriodLength = ({ type }: THabitFreq) => {

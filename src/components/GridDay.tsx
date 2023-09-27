@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FaPlay, FaFlagCheckered, FaLocationPin } from 'react-icons/fa6';
 
 import { THabitRealization, THabitPeriodStatus } from '../store';
+import { getStatusColor } from '../store/helpers/habits';
 import { flexWrappers } from '../styles/mixins';
 
 const StyledGridDay = styled.div<{
@@ -59,13 +60,9 @@ const GridDay = ({ day, isSelected, setSelectedDate }: IGridDayProps) => {
     isSelected ? setSelectedDate(undefined) : setSelectedDate(date);
   };
 
-  let bgColor = 'gray';
-  if (isOutOfScope) bgColor = 'transparent';
-  if (dayStatus === 'DONE') bgColor = 'green';
-  if (dayStatus === 'NOT-DONE') bgColor = 'red';
-  if (dayStatus === 'EMPTY' && periodStatus === 'DONE') bgColor = 'lightgreen';
-  if (dayStatus === 'EMPTY' && periodStatus === 'WAITING') bgColor = 'yellow';
-  if (dayStatus === 'EMPTY' && periodStatus === 'NOT-DONE') bgColor = 'orange';
+  const bgColor = isOutOfScope
+    ? 'transparent'
+    : getStatusColor(dayStatus, periodStatus);
 
   return (
     <StyledGridDay

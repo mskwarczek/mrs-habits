@@ -19,6 +19,7 @@ import {
 import {
   extendRealizationData,
   getReadableStatus,
+  getStatusColor,
 } from '../store/helpers/habits';
 import {
   getProperDateString,
@@ -276,18 +277,18 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
               {
                 value: 'NOT-DONE',
                 content: getReadableStatus('NOT-DONE'),
-                color: 'red',
+                color: getStatusColor('NOT-DONE'),
               },
               {
                 value: 'EMPTY',
                 content: getReadableStatus('EMPTY'),
-                color: 'gray',
+                color: getStatusColor('EMPTY'),
                 hidden: frequency.type === 'DAILY' && !selectedDayData.isToday,
               },
               {
                 value: 'DONE',
                 content: getReadableStatus('DONE'),
-                color: 'green',
+                color: getStatusColor('DONE'),
               },
             ]}
           />
