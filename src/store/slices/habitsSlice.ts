@@ -92,12 +92,6 @@ export const editHabitRealization = createAsyncThunk(
             return day;
           },
         );
-        console.log(
-          'docRef, docData, editedRealization',
-          docRef,
-          docData,
-          editedRealization,
-        );
         await updateDoc(docRef, { realization: editedRealization });
         return {
           id: editPayload.habitId,
@@ -123,7 +117,10 @@ export const updateHabits = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const batch = writeBatch(db);
-      const updateData = new Map();
+      const updateData: {
+        habitId: string;
+        realization: THabitRealization[];
+      }[] = [];
       const { habits } = thunkAPI.getState() as { habits: IHabitsState };
       habits.data?.map((habit) => {
         const docRef = doc(db, 'habits', habit.id);
@@ -164,7 +161,10 @@ export const updateHabits = createAsyncThunk(
         }
         batch.update(docRef, { realization: realization });
         batch.update(docRef, { 'meta.updatedAt': new Date().toISOString() });
-        updateData.set(habit.id, realization);
+        updateData.push({
+          habitId: habit.id,
+          realization,
+        });
       });
       await batch.commit();
       return {
@@ -216,11 +216,13 @@ export const habitsSlice = createSlice({
       state.error = action.error;
     });
     builder.addCase(updateHabits.fulfilled, (state, action) => {
-      state.data?.forEach((habit) => {
-        if (action.payload.updateData.has(habit.id)) {
-          const updateData = action.payload.updateData.get(habit.id);
-          habit.realization = updateData;
-          habit.meta.updatedAt = action.payload.updatedAt;
+      action.payload.updateData.map((elem) => {
+        const habitIdx = state.data?.findIndex(
+          (habit) => habit.id === elem.habitId,
+        );
+        if (state.data && habitIdx && state.data[habitIdx]) {
+          state.data[habitIdx].realization = elem.realization;
+          state.data[habitIdx].meta.updatedAt = action.payload.updatedAt;
         }
       });
     });
