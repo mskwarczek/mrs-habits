@@ -32,6 +32,7 @@ export {
   createHabit,
   clearHabits,
   updateHabits,
+  editHabitRealization,
 } from './slices/habitsSlice';
 export {
   userSlice,

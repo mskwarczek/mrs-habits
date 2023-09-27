@@ -79,7 +79,7 @@ export const extendRealizationData = (
       periodDay < periodRequirements.length &&
       dayCount + periodDay < realization.length
     ) {
-      const dayStatus = realization[periodDay].dayStatus;
+      const dayStatus = realization[dayCount + periodDay].dayStatus;
       if (dayStatus === 'DONE') realizationsCount++;
       if (
         realizationsCount > 0 &&
@@ -97,7 +97,7 @@ export const extendRealizationData = (
     }
     const periodStart =
       realization[periodCount * periodRequirements.length].date;
-    const periodEnd = realization[periodDay - 1].date;
+    const periodEnd = realization[(periodCount + 1) * periodDay - 1].date;
     result.push({
       ...realization[dayCount],
       periodStart,

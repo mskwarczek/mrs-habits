@@ -99,7 +99,7 @@ const ButtonGroup = ({
                 $isSelected={option.value === value}
                 $direction={direction}
                 $color={option.color}
-                onClick={() => onChange(option)}
+                onClick={() => onChange(option.value)}
               >
                 {option.content}
               </StyledGroupButton>

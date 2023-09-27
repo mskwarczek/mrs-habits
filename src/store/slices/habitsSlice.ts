@@ -5,9 +5,11 @@ import {
 } from '@reduxjs/toolkit';
 import {
   doc,
+  collection,
+  getDoc,
   getDocs,
   addDoc,
-  collection,
+  updateDoc,
   writeBatch,
 } from 'firebase/firestore';
 
@@ -51,6 +53,62 @@ export const createHabit = createAsyncThunk(
       const habitsRef = collection(db, 'habits');
       const docRef = await addDoc(habitsRef, habit);
       return { ...habit, id: docRef.id } as IHabit;
+    } catch (error) {
+      console.error('ERROR!', error);
+      if (error instanceof Error)
+        return thunkAPI.rejectWithValue({ error: error.message });
+      else return thunkAPI.rejectWithValue({ error });
+    }
+  },
+);
+
+interface IEditHabitRealizationPayload {
+  habitId: string;
+  date: string;
+  values: {
+    dayStatus?: THabitDayStatus;
+    note?: string;
+  };
+}
+
+export const editHabitRealization = createAsyncThunk(
+  'editHabitRealization',
+  async (editPayload: IEditHabitRealizationPayload, thunkAPI) => {
+    try {
+      const docRef = doc(db, 'habits', editPayload.habitId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const newStatus = editPayload.values.dayStatus;
+        const newNote = editPayload.values.note;
+        const docData = docSnap.data();
+        const editedRealization = docData.realization.map(
+          (day: THabitRealization) => {
+            if (day.date === editPayload.date)
+              return {
+                ...day,
+                ...(newStatus && { dayStatus: newStatus }),
+                ...(newNote && { note: newNote }),
+              };
+            return day;
+          },
+        );
+        console.log(
+          'docRef, docData, editedRealization',
+          docRef,
+          docData,
+          editedRealization,
+        );
+        await updateDoc(docRef, { realization: editedRealization });
+        return {
+          id: editPayload.habitId,
+          realization: editedRealization,
+          updatedAt: new Date().toISOString(),
+        };
+      } else {
+        throw new Error(
+          `Error in action editHabitRealization. Habit with given ID doesn't exist (${editPayload.habitId}).`,
+        );
+      }
     } catch (error) {
       console.error('ERROR!', error);
       if (error instanceof Error)
@@ -143,6 +201,18 @@ export const habitsSlice = createSlice({
       else state.data = [action.payload];
     });
     builder.addCase(createHabit.rejected, (state, action) => {
+      state.error = action.error;
+    });
+    builder.addCase(editHabitRealization.fulfilled, (state, action) => {
+      const habitIdx = state.data?.findIndex(
+        (habit) => habit.id === action.payload.id,
+      );
+      if (state.data && habitIdx && state.data[habitIdx]) {
+        state.data[habitIdx].realization = action.payload.realization;
+        state.data[habitIdx].meta.updatedAt = action.payload.updatedAt;
+      }
+    });
+    builder.addCase(editHabitRealization.rejected, (state, action) => {
       state.error = action.error;
     });
     builder.addCase(updateHabits.fulfilled, (state, action) => {

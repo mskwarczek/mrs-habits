@@ -10,7 +10,12 @@ import {
   Image,
   HabitRealizationGrid,
 } from './index';
-import { IHabit } from '../store';
+import {
+  IHabit,
+  useAppDispatch,
+  editHabitRealization,
+  THabitDayStatus,
+} from '../store';
 import {
   extendRealizationData,
   getReadableStatus,
@@ -121,9 +126,23 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
     undefined,
   );
   const navigate = useNavigate();
+  const appDispatch = useAppDispatch();
 
   const handleNav = (endpoint: string) => {
     navigate(endpoint);
+  };
+
+  const handleEditDayState = (value: THabitDayStatus) => {
+    if (!selectedDate) return;
+    appDispatch(
+      editHabitRealization({
+        habitId: id,
+        date: selectedDate,
+        values: {
+          dayStatus: value,
+        },
+      }),
+    );
   };
 
   const timeSinceStart = startDate && getTimeSinceDate(startDate);
@@ -252,7 +271,7 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
           <ButtonGroup
             value={selectedDayData.dayStatus}
             title={'Change day status'}
-            onChange={(option) => console.log('change!', option)}
+            onChange={handleEditDayState}
             options={[
               {
                 value: 'NOT-DONE',
