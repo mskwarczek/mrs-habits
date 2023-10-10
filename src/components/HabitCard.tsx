@@ -173,6 +173,7 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
       const extendedRealizationData = extendRealizationData(
         frequency,
         realization,
+        endDate,
       );
 
       const grid: IGridDay[][] = [];

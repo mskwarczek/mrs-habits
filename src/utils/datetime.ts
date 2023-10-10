@@ -49,3 +49,19 @@ export const getLastDayOfWeek = (date: string | Date) => {
   const diff = d.getDate() + (7 - day) - (day === 0 ? 7 : 0);
   return new Date(d.setDate(diff));
 };
+
+export const getEarlierDate = (first: string | Date, second: string | Date) => {
+  if (
+    new Date(first).setHours(0, 0, 0, 0) < new Date(second).setHours(0, 0, 0, 0)
+  )
+    return getProperDateString(first);
+  return getProperDateString(second);
+};
+
+export const getLaterDate = (first: string | Date, second: string | Date) => {
+  if (
+    new Date(first).setHours(0, 0, 0, 0) > new Date(second).setHours(0, 0, 0, 0)
+  )
+    return getProperDateString(first);
+  return getProperDateString(second);
+};

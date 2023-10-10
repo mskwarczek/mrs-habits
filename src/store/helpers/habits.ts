@@ -5,6 +5,13 @@ import {
   THabitDayStatus,
 } from '../types/habit';
 import { hextToRgbaString } from '../../utils/colors';
+import {
+  getProperDateString,
+  getTimeBetweenDates,
+  getFirstDayOfWeek,
+  getLastDayOfWeek,
+  getEarlierDate,
+} from '../../utils/datetime';
 
 export const getReadableStatus = (
   status: THabitDayStatus | THabitPeriodStatus,
@@ -59,9 +66,54 @@ export const getPeriodRequiredRealizations = ({ type }: THabitFreq) => {
   }
 };
 
+const getPeriodEndDate = (
+  realization: THabitRealization[],
+  habitEndDate?: string,
+) => {
+  if (!realization.length) return getProperDateString(new Date());
+  const realizationEnd = realization[realization.length - 1].date;
+  if (habitEndDate && realizationEnd === habitEndDate) return realizationEnd;
+  if (habitEndDate && realizationEnd !== habitEndDate)
+    return getProperDateString(
+      getEarlierDate(habitEndDate, getLastDayOfWeek(realizationEnd)),
+    );
+  return getProperDateString(getLastDayOfWeek(realizationEnd));
+};
+
+export const getPeriodOffsets = (
+  frequency: THabitFreq,
+  realization: THabitRealization[],
+) => {
+  const defaultValue = {
+    startOffset: 0,
+    realizationEndOffset: 0,
+  };
+  if (!realization.length) return defaultValue;
+
+  const realizationStart = realization[0].date;
+  const realizationEnd = realization[realization.length - 1].date;
+
+  switch (frequency.type) {
+    case 'WEEKLY':
+      return {
+        startOffset: getTimeBetweenDates(
+          getFirstDayOfWeek(realizationStart),
+          realizationStart,
+        ).days,
+        realizationEndOffset: getTimeBetweenDates(
+          realizationEnd,
+          getLastDayOfWeek(realizationEnd),
+        ).days,
+      };
+    case 'DAILY':
+    default:
+      return defaultValue;
+  }
+};
+
 export const getPeriodRequirements = (frequency: THabitFreq) => {
   return {
-    length: getPeriodLength(frequency),
+    periodLength: getPeriodLength(frequency),
     requiredRealizations: getPeriodRequiredRealizations(frequency),
   };
 };
@@ -69,6 +121,7 @@ export const getPeriodRequirements = (frequency: THabitFreq) => {
 export const extendRealizationData = (
   frequency: THabitFreq,
   realization: THabitRealization[],
+  endDate?: string,
 ) => {
   if (!realization.length) return [];
   let result = [];
@@ -84,43 +137,59 @@ export const extendRealizationData = (
     }));
     return result;
   }
-  const periodRequirements = getPeriodRequirements(frequency);
+  const { startOffset, realizationEndOffset } = getPeriodOffsets(
+    frequency,
+    realization,
+  );
+  const { periodLength, requiredRealizations } =
+    getPeriodRequirements(frequency);
   let periodCount = 0;
   let dayCount = 0;
   let periodStatus: THabitPeriodStatus = 'WAITING';
   let realizationsCount = 0;
   let periodDay = 0;
   while (dayCount < realization.length) {
+    let adjustedPeriodLength = periodLength;
+    if (periodCount === 0) adjustedPeriodLength = periodLength - startOffset;
+    if ((periodCount + 1) * periodLength - startOffset >= realization.length)
+      adjustedPeriodLength = adjustedPeriodLength - realizationEndOffset;
+    const periodStartIdx = Math.max(
+      0,
+      periodCount * periodLength - startOffset,
+    );
+    const periodStart = realization[periodStartIdx].date;
+    const periodEndIndex = periodStartIdx + adjustedPeriodLength - 1;
+    const periodEnd = getEarlierDate(
+      realization[periodEndIndex].date,
+      getPeriodEndDate(realization, endDate),
+    );
+
     while (
-      periodDay < periodRequirements.length &&
-      dayCount + periodDay < realization.length
+      dayCount + periodDay < realization.length &&
+      periodDay < adjustedPeriodLength
     ) {
       const dayStatus = realization[dayCount + periodDay].dayStatus;
       if (dayStatus === 'DONE') realizationsCount++;
-      if (
-        realizationsCount > 0 &&
-        realizationsCount < periodRequirements.requiredRealizations
-      )
+      if (realizationsCount > 0 && realizationsCount < requiredRealizations)
         periodStatus = 'PART-DONE';
-      if (realizationsCount >= periodRequirements.requiredRealizations)
-        periodStatus = 'DONE';
+      if (realizationsCount >= requiredRealizations) periodStatus = 'DONE';
       periodDay++;
       if (
-        periodDay === periodRequirements.length &&
-        !(periodStatus === 'PART-DONE' || periodStatus === 'DONE')
+        periodDay === adjustedPeriodLength &&
+        !(periodStatus === 'PART-DONE' || periodStatus === 'DONE') &&
+        realization[dayCount + periodDay - 1].date !==
+          getProperDateString(new Date())
       )
         periodStatus = 'NOT-DONE';
     }
-    const periodStart =
-      realization[periodCount * periodRequirements.length].date;
-    const periodEnd = realization[(periodCount + 1) * periodDay - 1].date;
+
     result.push({
       ...realization[dayCount],
       periodStart,
       periodEnd,
       periodStatus,
     });
-    if (dayCount === periodCount * periodRequirements.length + periodDay - 1) {
+    if (dayCount === periodEndIndex) {
       periodStatus = 'WAITING';
       realizationsCount = 0;
       periodDay = 0;
