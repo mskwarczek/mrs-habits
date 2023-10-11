@@ -5,7 +5,7 @@ const StyledInput = styled.input`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 300px;
+  min-width: ${({ type }) => (type === 'number' ? '50px' : '300px')};
   outline: inherit;
   border: none;
   border-radius: ${({ theme }) => theme.borderRad.m};
@@ -22,6 +22,9 @@ interface IInputProps {
   name?: string;
   type?: string;
   value?: string | number;
+  step?: string;
+  min?: string;
+  max?: string;
   disabled?: boolean;
   required?: boolean;
   onChange?: (...args: any[]) => void;
@@ -32,6 +35,9 @@ const Input = ({
   name,
   type = 'text',
   value = '',
+  step,
+  min,
+  max,
   disabled,
   required,
   onChange,
@@ -42,6 +48,9 @@ const Input = ({
       name={name}
       type={type}
       value={value}
+      step={step}
+      min={min}
+      max={max}
       disabled={disabled}
       required={required}
       onChange={onChange}

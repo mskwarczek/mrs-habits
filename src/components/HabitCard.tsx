@@ -4,25 +4,14 @@ import styled from 'styled-components';
 import { FaArrowDownLong, FaArrowRightLong } from 'react-icons/fa6';
 
 import type { IHabit, THabitDayStatus } from '../types';
-import {
-  Button,
-  ButtonGroup,
-  Image,
-  HabitRealizationGrid,
-} from './index';
-import {
-  useAppDispatch,
-  editHabitRealization,
-} from '../store';
+import { Button, ButtonGroup, Image, HabitRealizationGrid } from './index';
+import { useAppDispatch, editHabitRealization } from '../store';
 import {
   getReadableStatus,
   getStatusColor,
   buildHabitGrid,
 } from '../features/habits';
-import {
-  getProperDateString,
-  getTimeSinceDate,
-} from '../utils/datetime';
+import { getProperDateString, getTimeSinceDate } from '../utils/datetime';
 import { flexWrappers } from '../styles/mixins';
 
 const StyledCard = styled.div<{ $selectedDate?: string }>`
@@ -144,9 +133,10 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
   const timeSinceStart = startDate && getTimeSinceDate(startDate);
   const timeSinceEnd = endDate && getTimeSinceDate(endDate);
 
-  const { grid, detaildedData, weekNumber, properStart, properEnd } =
-    useMemo(() => buildHabitGrid(frequency, realization, startDate, endDate), 
-      [startDate, endDate, frequency, realization]);
+  const { grid, detaildedData, weekNumber, properStart, properEnd } = useMemo(
+    () => buildHabitGrid(frequency, realization, startDate, endDate),
+    [startDate, endDate, frequency, realization],
+  );
 
   const selectedDayData = selectedDate
     ? detaildedData.get(selectedDate)

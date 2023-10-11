@@ -7,11 +7,7 @@ import { getDoc, setDoc, updateDoc, collection, doc } from 'firebase/firestore';
 
 import type { IUser, IHabit } from '../../types';
 import { db } from '../../services/firebase';
-import {
-  getUserGoals,
-  getUserHabits,
-  updateHabits,
-} from '../index';
+import { getUserGoals, getUserHabits, updateHabits } from '../index';
 
 export interface IUserState {
   data?: IUser;

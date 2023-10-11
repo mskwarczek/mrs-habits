@@ -8,7 +8,9 @@ import { flexWrappers } from '../../styles/mixins';
 import { createHabit, addUserHabit } from '../../store';
 
 const StyledFieldsGroup = styled.div`
-  ${flexWrappers.rLine};
+  ${flexWrappers.cLine};
+  gap: ${({ theme }) => theme.space.s};
+  width: 100%;
 `;
 
 export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
@@ -41,11 +43,15 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
             type={'select'}
             options={[
               { value: '', text: 'Select option' },
-              // { value: 'HOURLY', text: 'Once per hour' }, // TODO
-              { value: 'DAILY', text: 'Once a day or continuously' },
-              { value: 'WEEKLY', text: 'Once a week' },
-              // { value: 'MONTHLY', text: 'Once a month' }, // TODO
-              // { value: 'YEARLY', text: 'Every year' }, // TODO
+              { value: 'DAILY', text: 'Every day (continuously)' },
+              {
+                value: 'WEEKLY',
+                text: 'At least one time per week (Mon - Sun)',
+              },
+              {
+                value: 'X-PER-WEEK',
+                text: 'Several times per week (Mon - Sun)',
+              },
             ]}
             required
             label={'Frequency:'}
@@ -53,11 +59,36 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
             value={state.result?.frequency?.type}
             onChange={(e: React.FormEvent<HTMLSelectElement>) => changeValue(e)}
           />
+          {state.result?.frequency?.category === 'X-PER-PERIOD' && (
+            <FormField
+              id={'creator-field-freq-value'}
+              name={'frequency.value'}
+              type={'number'}
+              step={'1'}
+              min={'1'}
+              max={'7'}
+              required
+              label={'Minimum realizations:'}
+              description={
+                'How many realizations should be your minimum in given period'
+              }
+              value={state.result?.frequency?.value}
+              onChange={(e: React.FormEvent<HTMLSelectElement>) =>
+                changeValue(e)
+              }
+              externalIsValid={
+                state.result.frequency.value.match(/^[1-9]\d*$/) ? true : false
+              }
+            />
+          )}
         </StyledFieldsGroup>
       ),
       isValid: (result: IHabitTemplate) =>
-        typeof result.frequency?.type === 'string' &&
-        result.frequency.type.length > 0,
+        result.frequency &&
+        result.frequency.type.length > 0 &&
+        (result.frequency.category === 'STANDARD' ||
+          (result.frequency.category === 'X-PER-PERIOD' &&
+            !!result.frequency.value.match(/^[1-9]\d*$/))),
     },
     {
       component: (
@@ -66,7 +97,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           id={'creator-field-start-date'}
           name={'startDate'}
           type={'date'}
-          value={state.result?.startDate} // TODO: THIS MUST BE RESTICTED FOR WEEKLY/MONTHLY/YEARLY MODES
+          value={state.result?.startDate}
           required
           label={'Start date:'}
           description={
@@ -85,7 +116,7 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
           id={'creator-field-end-date'}
           name={'endDate'}
           type={'date'}
-          value={state.result?.endDate} // TODO: THIS MUST BE RESTICTED FOR WEEKLY/MONTHLY/YEARLY MODES
+          value={state.result?.endDate}
           label={'End date:'}
           description={
             'Is there a date in the future when you would like to remove or modify this habit? If so, then provide it here. When time comes, we will notify you that your habit needs an update.'
@@ -172,41 +203,6 @@ export const habitCreatorSteps = ({ state, changeValue }: ICreatorSteps) => {
     },
   ];
 };
-
-{
-  /* {state.result?.frequency?.category === 'TIMES'
-? <Input
-  id={'new-habit-freq-value'}
-  name={'frequency.value'}
-  type={'number'}
-  value={state.result?.frequency?.value}
-  onChange={(e: React.FormEvent<HTMLInputElement>) => changeTextValue(e)}
-/>
-: state.result?.frequency?.category === 'SPECIFIC'
-? <Input
-  id={'new-habit-freq-value'}
-  name={'frequency.value'}
-  type={'number'}
-  value={state.result?.frequency?.value}
-  onChange={(e: React.FormEvent<HTMLInputElement>) => changeTextValue(e)}
-/>
-: null
-} */
-}
-
-//   <FormField
-//     id={'creator-field-measurement-type'}
-//     name={'measurement.type'}
-//     type={'select'}
-//     options={[
-//       { value: 'BOOL', text: 'Done / Not done' },
-//       { value: 'NOTE_1_5', text: 'Note from 1 to 5' },
-//     ]}
-//     label={'Measurement:'}
-//     description={'How is your progress going to be measured'}
-//     value={state.result?.frequency?.type}
-//     onChange={(e: React.FormEvent<HTMLInputElement>) => changeValue(e)}
-//   />
 
 const HabitCeator = () => {
   return (

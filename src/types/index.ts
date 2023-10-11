@@ -7,6 +7,7 @@ export type {
   THabitDayStatus,
   THabitPeriodStatus,
   TStandardHabitFreq,
+  TXPerPeriodHabitFreq,
   THabitFreq,
   IHabitGridDay,
 } from './habit';

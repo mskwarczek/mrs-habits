@@ -4,20 +4,26 @@ import styled from 'styled-components';
 import { Input, Select, Textarea } from './index';
 import { flexWrappers } from '../styles/mixins';
 
+const FormWrapper = styled.div`
+  ${flexWrappers.cLine};
+  align-items: start;
+  width: 450px;
+`;
+
 const StyledWrapper = styled.div`
   ${flexWrappers.rLine};
-  padding-bottom: ${({ theme }) => theme.space.xs};
+  gap: ${({ theme }) => theme.space.xs};
 `;
 
 const StyledValidity = styled.p<{ $isValid?: string }>`
   width: 20px;
-  padding-left: ${({ theme }) => theme.space.xs};
   color: ${({ theme, $isValid }) =>
     $isValid ? theme.color.text.success : theme.color.text.error};
 `;
 
 const DescriptionText = styled.p<{ $isValid?: string }>`
   font-size: ${({ theme }) => theme.fontSize.s};
+  padding-top: ${({ theme }) => theme.space.xs};
 `;
 
 interface IFormFieldProps {
@@ -30,6 +36,9 @@ interface IFormFieldProps {
     text: string;
     disabled?: boolean;
   }[];
+  step?: string;
+  min?: string;
+  max?: string;
   disabled?: boolean;
   required?: boolean;
   multiple?: boolean;
@@ -45,6 +54,9 @@ const FormField = ({
   type,
   value = '',
   options = [],
+  step,
+  min,
+  max,
   disabled,
   required,
   multiple,
@@ -61,7 +73,7 @@ const FormField = ({
       : false;
 
   return (
-    <div>
+    <FormWrapper>
       <StyledWrapper>
         <label htmlFor={id}>{label}</label>
         <StyledWrapper>
@@ -91,6 +103,9 @@ const FormField = ({
               name={name}
               type={type}
               value={value}
+              step={step}
+              min={min}
+              max={max}
               disabled={disabled}
               required={required}
               onChange={onChange}
@@ -102,7 +117,7 @@ const FormField = ({
         </StyledWrapper>
       </StyledWrapper>
       <DescriptionText>{description}</DescriptionText>
-    </div>
+    </FormWrapper>
   );
 };
 

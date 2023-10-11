@@ -2,7 +2,7 @@ import React, { Dispatch } from 'react';
 import styled from 'styled-components';
 import { FaPlay, FaFlagCheckered, FaLocationPin } from 'react-icons/fa6';
 
-import type { THabitRealization, THabitPeriodStatus, IHabitGridDay } from '../types';
+import type { IHabitGridDay } from '../types';
 import { getStatusColor } from '../features/habits/habits';
 import { flexWrappers } from '../styles/mixins';
 

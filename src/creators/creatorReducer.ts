@@ -1,4 +1,9 @@
-import { IHabitTemplate, THabitDayStatus, TStandardHabitFreq } from '../types';
+import {
+  IHabitTemplate,
+  THabitDayStatus,
+  TStandardHabitFreq,
+  TXPerPeriodHabitFreq,
+} from '../types';
 import {
   getProperDateString,
   getTimeSinceDate,
@@ -77,11 +82,8 @@ export const creatorReducer = (
             if (nested[1] === 'type') {
               if (
                 payload.value === '' ||
-                // || payload.value === 'HOURLY'
                 payload.value === 'DAILY' ||
                 payload.value === 'WEEKLY'
-                // || payload.value === 'MONTHLY' ||
-                // || payload.value === 'YEARLY'
               ) {
                 return {
                   ...state,
@@ -90,6 +92,31 @@ export const creatorReducer = (
                     frequency: {
                       category: 'STANDARD',
                       type: payload.value as TStandardHabitFreq,
+                    },
+                  },
+                };
+              } else if (payload.value === 'X-PER-WEEK') {
+                return {
+                  ...state,
+                  result: {
+                    ...state.result,
+                    frequency: {
+                      category: 'X-PER-PERIOD',
+                      type: payload.value as TXPerPeriodHabitFreq,
+                      value: '2',
+                    },
+                  },
+                };
+              } else return state;
+            } else if (nested[1] === 'value') {
+              if (state.result?.frequency?.category === 'X-PER-PERIOD') {
+                return {
+                  ...state,
+                  result: {
+                    ...state.result,
+                    frequency: {
+                      ...state.result.frequency,
+                      value: payload.value,
                     },
                   },
                 };

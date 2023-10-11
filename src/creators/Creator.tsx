@@ -148,7 +148,7 @@ export const Creator = ({
               Object.prototype.hasOwnProperty.call(
                 collection[state.step],
                 'isValid',
-              ) && collection[state.step].isValid(state.result) === false
+              ) && !collection[state.step].isValid(state.result)
             }
           />
         )}
@@ -164,7 +164,7 @@ export const Creator = ({
               Object.prototype.hasOwnProperty.call(
                 collection[state.step],
                 'isValid',
-              ) && collection[state.step].isValid(state.result) === false
+              ) && !collection[state.step].isValid(state.result)
             }
           />
         )}

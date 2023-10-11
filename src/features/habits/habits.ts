@@ -41,8 +41,9 @@ export const getStatusColor = (
   if (dayStatus === 'DONE') return '#008000';
   if (dayStatus === 'NOT-DONE') return '#8B0000';
   if (dayStatus === 'EMPTY') {
-    if (periodStatus === 'DONE') return hextToRgbaString('#008000', 0.5);
-    if (periodStatus === 'PARTIALLY-DONE') return hextToRgbaString('#008000', 0.1);
+    if (periodStatus === 'DONE') return hextToRgbaString('#008000', 0.6);
+    if (periodStatus === 'PARTIALLY-DONE')
+      return hextToRgbaString('#008000', 0.2);
     if (periodStatus === 'WAITING') return hextToRgbaString('#FFFF00', 0.5);
     if (periodStatus === 'NOT-DONE') return hextToRgbaString('#8B0000', 0.5);
   }
@@ -52,6 +53,7 @@ export const getStatusColor = (
 export const getPeriodLength = ({ type }: THabitFreq) => {
   switch (type) {
     case 'WEEKLY':
+    case 'X-PER-WEEK':
       return 7;
     case 'DAILY':
     default:
@@ -59,8 +61,12 @@ export const getPeriodLength = ({ type }: THabitFreq) => {
   }
 };
 
-export const getPeriodRequiredRealizations = ({ type }: THabitFreq) => {
-  switch (type) {
+export const getPeriodRequiredRealizations = (frequency: THabitFreq) => {
+  switch (frequency.type) {
+    case 'X-PER-WEEK':
+      return frequency.category === 'X-PER-PERIOD'
+        ? parseInt(frequency.value)
+        : 1;
     case 'WEEKLY':
     case 'DAILY':
     default:
@@ -97,6 +103,7 @@ export const getPeriodOffsets = (
 
   switch (frequency.type) {
     case 'WEEKLY':
+    case 'X-PER-WEEK':
       return {
         startOffset: getTimeBetweenDates(
           getFirstDayOfWeek(realizationStart),
@@ -213,9 +220,7 @@ export const buildHabitGrid = (
   const todayString = getProperDateString(today);
 
   const properStart =
-    todayTime > new Date(startDate).setHours(0, 0, 0, 0)
-      ? startDate
-      : today;
+    todayTime > new Date(startDate).setHours(0, 0, 0, 0) ? startDate : today;
   const properStartTime = new Date(properStart).getTime();
   const gridStart = getFirstDayOfWeek(properStart);
 
@@ -242,8 +247,7 @@ export const buildHabitGrid = (
     if (dayNumber === 0) grid.push([]);
     const dayTime = day.getTime();
     const dayString = getProperDateString(day);
-    const isOutOfScope =
-      dayTime < properStartTime || dayTime > properEndTime;
+    const isOutOfScope = dayTime < properStartTime || dayTime > properEndTime;
     const realizationData = !isOutOfScope
       ? extendedRealizationData.find((day) => day.date === dayString)
       : undefined;
@@ -272,4 +276,4 @@ export const buildHabitGrid = (
     properStart,
     properEnd,
   };
-}
+};

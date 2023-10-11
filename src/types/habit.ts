@@ -1,11 +1,9 @@
-export type TStandardHabitFreq =
-  // | 'HOURLY'
-  'DAILY' | 'WEEKLY';
-// | 'MONTHLY'
-// | 'YEARLY';
+export type TStandardHabitFreq = 'DAILY' | 'WEEKLY' | 'X-PER-WEEK';
+export type TXPerPeriodHabitFreq = 'X-PER-WEEK';
 
-export type THabitFreq = { category: 'STANDARD'; type: TStandardHabitFreq };
-//  | { category: 'TIMES', type: 'HOUR-TIMES' | 'DAY-TIMES' | 'WEEK-TIMES' | 'MONTH-TIMES' | 'YEAR-TIMES', value: number } // TODO
+export type THabitFreq =
+  | { category: 'STANDARD'; type: TStandardHabitFreq }
+  | { category: 'X-PER-PERIOD'; type: TXPerPeriodHabitFreq; value: string };
 //  | { category: 'SPECIFIC', type: 'DAYHOUR-SPECIFIC', value: string } // TODO
 //  | { category: 'SPECIFIC', type: 'WEEKDAY-SPECIFIC', value: 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN' } // TODO
 //  | { category: 'SPECIFIC', type: 'MONTHDAY-SPECIFIC', value: number }; // TODO
@@ -13,7 +11,11 @@ export type THabitFreq = { category: 'STANDARD'; type: TStandardHabitFreq };
 // type TReminder = 'APP' | 'NOTIFICATION' | 'EMAIL'; // TODO
 
 export type THabitDayStatus = 'DONE' | 'EMPTY' | 'NOT-DONE';
-export type THabitPeriodStatus = 'DONE' | 'PARTIALLY-DONE' | 'WAITING' | 'NOT-DONE';
+export type THabitPeriodStatus =
+  | 'DONE'
+  | 'PARTIALLY-DONE'
+  | 'WAITING'
+  | 'NOT-DONE';
 
 export type THabitRealization = {
   date: string;
