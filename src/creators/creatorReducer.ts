@@ -1,4 +1,4 @@
-import { IHabitTemplate, THabitDayStatus, TStandardHabitFreq } from '../store';
+import { IHabitTemplate, THabitDayStatus, TStandardHabitFreq } from '../types';
 import {
   getProperDateString,
   getTimeSinceDate,

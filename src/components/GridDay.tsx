@@ -2,8 +2,8 @@ import React, { Dispatch } from 'react';
 import styled from 'styled-components';
 import { FaPlay, FaFlagCheckered, FaLocationPin } from 'react-icons/fa6';
 
-import { THabitRealization, THabitPeriodStatus } from '../store';
-import { getStatusColor } from '../store/helpers/habits';
+import type { THabitRealization, THabitPeriodStatus, IHabitGridDay } from '../types';
+import { getStatusColor } from '../features/habits/habits';
 import { flexWrappers } from '../styles/mixins';
 
 const StyledGridDay = styled.div<{
@@ -26,19 +26,8 @@ const StyledGridDay = styled.div<{
   }
 `;
 
-export interface IGridDay extends Partial<THabitRealization> {
-  date: string;
-  periodStart?: string;
-  periodEnd?: string;
-  periodStatus?: THabitPeriodStatus;
-  isToday: boolean;
-  isStartDate: boolean;
-  isEndDate: boolean;
-  isOutOfScope: boolean;
-}
-
 interface IGridDayProps {
-  day: IGridDay;
+  day: IHabitGridDay;
   isSelected: boolean;
   setSelectedDate: Dispatch<React.SetStateAction<string | undefined>>;
 }

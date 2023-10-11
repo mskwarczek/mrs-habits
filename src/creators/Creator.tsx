@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import type { IHabit } from '../types';
 import { Button } from '../components';
 import { flexWrappers } from '../styles/mixins';
 import {
@@ -14,7 +15,6 @@ import {
   TRootState,
   useAppDispatch,
   useAppSelector,
-  IHabit,
   closeCreatorModal,
 } from '../store';
 

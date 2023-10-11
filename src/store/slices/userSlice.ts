@@ -5,10 +5,9 @@ import {
 } from '@reduxjs/toolkit';
 import { getDoc, setDoc, updateDoc, collection, doc } from 'firebase/firestore';
 
+import type { IUser, IHabit } from '../../types';
+import { db } from '../../services/firebase';
 import {
-  IUser,
-  IHabit,
-  db,
   getUserGoals,
   getUserHabits,
   updateHabits,

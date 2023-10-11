@@ -3,30 +3,25 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaArrowDownLong, FaArrowRightLong } from 'react-icons/fa6';
 
+import type { IHabit, THabitDayStatus } from '../types';
 import {
-  IGridDay,
   Button,
   ButtonGroup,
   Image,
   HabitRealizationGrid,
 } from './index';
 import {
-  IHabit,
   useAppDispatch,
   editHabitRealization,
-  THabitDayStatus,
 } from '../store';
 import {
-  extendRealizationData,
   getReadableStatus,
   getStatusColor,
-} from '../store/helpers/habits';
+  buildHabitGrid,
+} from '../features/habits';
 import {
   getProperDateString,
   getTimeSinceDate,
-  getFirstDayOfWeek,
-  getLastDayOfWeek,
-  addDays,
 } from '../utils/datetime';
 import { flexWrappers } from '../styles/mixins';
 
@@ -150,72 +145,8 @@ const HabitCard = ({ habit }: IHabitCardProps) => {
   const timeSinceEnd = endDate && getTimeSinceDate(endDate);
 
   const { grid, detaildedData, weekNumber, properStart, properEnd } =
-    useMemo(() => {
-      const today = new Date();
-      const todayTime = today.setHours(0, 0, 0, 0);
-      const todayString = getProperDateString(today);
-
-      const properStart =
-        todayTime > new Date(startDate).setHours(0, 0, 0, 0)
-          ? startDate
-          : today;
-      const properStartTime = new Date(properStart).getTime();
-      const gridStart = getFirstDayOfWeek(properStart);
-
-      const realizationEnd = endDate
-        ? endDate
-        : realization.length > 0
-        ? realization[realization.length - 1].date
-        : null;
-      const properEnd = realizationEnd ? realizationEnd : startDate;
-      const properEndTime = new Date(properEnd).getTime();
-      const gridEnd = getLastDayOfWeek(properEnd);
-      const extendedRealizationData = extendRealizationData(
-        frequency,
-        realization,
-        endDate,
-      );
-
-      const grid: IGridDay[][] = [];
-      const detaildedData = new Map();
-      let weekNumber = 0;
-      let dayNumber = 0;
-      let day = new Date(gridStart);
-      while (day <= gridEnd) {
-        if (dayNumber === 0) grid.push([]);
-        const dayTime = day.getTime();
-        const dayString = getProperDateString(day);
-        const isOutOfScope =
-          dayTime < properStartTime || dayTime > properEndTime;
-        const realizationData = !isOutOfScope
-          ? extendedRealizationData.find((day) => day.date === dayString)
-          : undefined;
-        const dayObj = {
-          ...(realizationData || {}),
-          date: dayString,
-          isToday: dayString === todayString,
-          isStartDate: dayString === startDate,
-          isEndDate: dayString === endDate,
-          isOutOfScope,
-        };
-        grid[weekNumber].push(dayObj);
-        detaildedData.set(dayString, dayObj);
-        if (dayNumber < 6) dayNumber++;
-        else {
-          weekNumber++;
-          dayNumber = 0;
-        }
-        day = addDays(day, 1);
-      }
-
-      return {
-        grid,
-        detaildedData,
-        weekNumber,
-        properStart,
-        properEnd,
-      };
-    }, [startDate, endDate, frequency, realization]);
+    useMemo(() => buildHabitGrid(frequency, realization, startDate, endDate), 
+      [startDate, endDate, frequency, realization]);
 
   const selectedDayData = selectedDate
     ? detaildedData.get(selectedDate)

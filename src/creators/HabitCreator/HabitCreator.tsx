@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import type { IHabitTemplate } from '../../types';
 import { FormField } from '../../components';
 import { Creator, ICreatorSteps } from '../Creator';
 import { flexWrappers } from '../../styles/mixins';
-import { createHabit, addUserHabit, IHabitTemplate } from '../../store';
+import { createHabit, addUserHabit } from '../../store';
 
 const StyledFieldsGroup = styled.div`
   ${flexWrappers.rLine};

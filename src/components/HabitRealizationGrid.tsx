@@ -1,7 +1,8 @@
 import React, { useState, Dispatch } from 'react';
 import styled from 'styled-components';
 
-import { GridDay, IGridDay } from './index';
+import { IHabitGridDay } from '../types';
+import { GridDay } from './index';
 import { transposeMatrix } from '../utils/math';
 
 const StyledGrid = styled.div<{
@@ -25,7 +26,7 @@ const StyledGrid = styled.div<{
 `;
 
 interface IHabitRealizationProps {
-  grid: IGridDay[][];
+  grid: IHabitGridDay[][];
   numberOfWeeks: number;
   selectedDate?: string;
   setSelectedDate: Dispatch<React.SetStateAction<string | undefined>>;

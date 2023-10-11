@@ -5,19 +5,6 @@ export type { IModalsState, IModal } from './slices/modalsSlice';
 export type { IUserState, IUserGoalPayload } from './slices/userSlice';
 export type { TRootState, TAppDispatch } from './store';
 
-export type { IAuth, IAuthTemplate } from './types/auth';
-export type {
-  IHabit,
-  IHabitTemplate,
-  THabitRealization,
-  THabitDayStatus,
-  THabitPeriodStatus,
-  TStandardHabitFreq,
-  THabitFreq,
-} from './types/habit';
-export type { IUser, IUserTemplate } from './types/user';
-
-export { app, db } from '../services/firebase';
 export { useAppDispatch, useAppSelector } from './hooks';
 export { authSlice, login, logout } from './slices/authSlice';
 export {

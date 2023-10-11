@@ -13,13 +13,24 @@ export type THabitFreq = { category: 'STANDARD'; type: TStandardHabitFreq };
 // type TReminder = 'APP' | 'NOTIFICATION' | 'EMAIL'; // TODO
 
 export type THabitDayStatus = 'DONE' | 'EMPTY' | 'NOT-DONE';
-export type THabitPeriodStatus = 'DONE' | 'PART-DONE' | 'WAITING' | 'NOT-DONE';
+export type THabitPeriodStatus = 'DONE' | 'PARTIALLY-DONE' | 'WAITING' | 'NOT-DONE';
 
 export type THabitRealization = {
   date: string;
   dayStatus: THabitDayStatus;
   note?: string;
 };
+
+export interface IHabitGridDay extends Partial<THabitRealization> {
+  date: string;
+  periodStart?: string;
+  periodEnd?: string;
+  periodStatus?: THabitPeriodStatus;
+  isToday: boolean;
+  isStartDate: boolean;
+  isEndDate: boolean;
+  isOutOfScope: boolean;
+}
 
 export interface IHabitTemplate {
   id?: string;

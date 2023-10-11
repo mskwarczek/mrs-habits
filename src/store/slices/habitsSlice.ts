@@ -13,8 +13,9 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 
-import { IHabit, THabitRealization, THabitDayStatus, db } from '../index';
+import type { IHabit, THabitRealization, THabitDayStatus } from '../../types';
 import { getProperDateString, addDays } from '../../utils/datetime';
+import { db } from '../../services/firebase';
 
 export interface IHabitsState {
   data?: IHabit[];

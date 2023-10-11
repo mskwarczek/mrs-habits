@@ -10,7 +10,8 @@ import {
   GoogleAuthProvider,
 } from 'firebase/auth';
 
-import { IAuth, initUser, clearUser, clearGoals } from '../index';
+import type { IAuth } from '../../types';
+import { initUser, clearUser, clearGoals } from '../index';
 
 export interface IAuthState {
   data?: IAuth;

@@ -5,7 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import { getDocs, addDoc, collection } from 'firebase/firestore';
 
-import { db } from '../index';
+import { db } from '../../services/firebase';
 
 export interface IGoal {
   name: string;
